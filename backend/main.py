@@ -50,7 +50,8 @@ async def add_security_headers(request: Request, call_next):
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['http://localhost:5173', 'http://127.0.0.1:5173', 'https://8clothes.vercel.app'],
+    allow_origins=['*'],
+    allow_credentials=False,
     allow_methods=['*'],
     allow_headers=['*'],
 )
