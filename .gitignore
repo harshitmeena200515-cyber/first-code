@@ -1,0 +1,28 @@
+# Node
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+.env
+**/.env
+
+# Python
+__pycache__/
+**/__pycache__/
+*.pyc
+venv/
+**/venv/
+.venv/
+**/.venv/
+env/
+
+# Uploaded Files
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Misc
+extracted/
+*.zip
+fashion.db
+harshit_meena_resume.*
+generate_pdf.py

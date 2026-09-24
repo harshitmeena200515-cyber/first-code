@@ -1,0 +1,237 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Google Fonts ─────────────────────────────────────── */
+:root {
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-sans:    'Inter', system-ui, sans-serif;
+
+  --gold:        #C9A96E;
+  --gold-light:  #E8D5B7;
+  --gold-dark:   #A07840;
+  --charcoal:    #1A1A1A;
+  --cream:       #F7F4F0;
+  --surface:     #FFFFFF;
+  --muted:       #6B7280;
+  --border:      #E5E7EB;
+}
+
+/* ─── Smooth scroll + base ─────────────────────────────── */
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  background-color: var(--cream);
+  color: var(--charcoal);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s, color 0.3s;
+}
+.dark body {
+  background-color: #0D0D0D;
+  color: #F0EDE8;
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border-radius: 3px;
+}
+
+/* ─── Selection ─────────────────────────────────────────── */
+::selection { background: var(--gold); color: #fff; }
+
+/* ─── Utility classes ──────────────────────────────────── */
+.font-display { font-family: var(--font-display); }
+
+.gradient-gold {
+  background: linear-gradient(135deg, #C9A96E, #E8D5B7, #A07840);
+}
+.gradient-dark {
+  background: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 50%, #0F0F0F 100%);
+}
+.gradient-text {
+  background: linear-gradient(135deg, #C9A96E, #E8D5B7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.3);
+}
+.dark .glass {
+  background: rgba(20,20,20,0.85);
+  border-color: rgba(255,255,255,0.08);
+}
+
+.glass-dark {
+  background: rgba(10,10,10,0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(201,169,110,0.15);
+}
+
+/* ─── Card hover animation ─────────────────────────────── */
+.card-lift {
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s ease;
+}
+.card-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.16);
+}
+
+/* ─── Shimmer skeleton ─────────────────────────────────── */
+.shimmer-bg {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s linear infinite;
+}
+.dark .shimmer-bg {
+  background: linear-gradient(90deg, #1f1f1f 25%, #2a2a2a 50%, #1f1f1f 75%);
+  background-size: 200% 100%;
+}
+
+/* ─── Trust badge colours ──────────────────────────────── */
+.trust-high     { @apply bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300; }
+.trust-medium   { @apply bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300; }
+.trust-low      { @apply bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300; }
+.trust-very_low { @apply bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300; }
+
+/* ─── Image error fallback ─────────────────────────────── */
+img.img-fallback {
+  background: linear-gradient(135deg, #C9A96E22, #1A1A1A11);
+}
+
+/* ─── Page transition wrapper ──────────────────────────── */
+.page-enter {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+
+/* ─── Expectation vs Reality slider ───────────────────── */
+.evr-container {
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  cursor: col-resize;
+}
+.evr-after {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  overflow: hidden;
+}
+.evr-handle {
+  position: absolute;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: #fff;
+  cursor: col-resize;
+  z-index: 10;
+  transform: translateX(-50%);
+}
+.evr-handle::before,
+.evr-handle::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #fff;
+  top: 50%;
+  margin-top: -18px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+.evr-handle::before { content: '⇔'; display:flex; align-items:center; justify-content:center; color:#1A1A1A; font-size:14px; }
+
+/* ─── Range input override ─────────────────────────────── */
+input[type='range'].evr-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  opacity: 0;
+  z-index: 20;
+  cursor: col-resize;
+  margin: 0;
+}
+
+/* ─── Outfit Builder canvas ─────────────────────────────── */
+.outfit-slot {
+  border: 2px dashed #C9A96E44;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+.outfit-slot:hover,
+.outfit-slot.active {
+  border-color: #C9A96E;
+  background-color: rgba(201,169,110,0.06);
+}
+
+/* ─── Quiz progress bar ─────────────────────────────────── */
+.quiz-progress-fill {
+  transition: width 0.5s cubic-bezier(0.34,1.56,0.64,1);
+  background: linear-gradient(90deg, #C9A96E, #E8D5B7);
+}
+
+/* ─── Star rating ───────────────────────────────────────── */
+.star-filled { color: #F59E0B; }
+.star-empty  { color: #D1D5DB; }
+
+/* ─── Scrollable horizontal strip ─────────────────────── */
+.h-scroll::-webkit-scrollbar { height: 0; }
+
+/* ─── Floating label input ─────────────────────────────── */
+.float-label input:focus ~ label,
+.float-label input:not(:placeholder-shown) ~ label {
+  @apply -translate-y-5 scale-75 text-gold;
+}
+.float-label label {
+  @apply absolute left-3 top-3 text-gray-400 text-sm transition-all duration-200 origin-left pointer-events-none;
+}
+
+/* ─── Custom checkbox ──────────────────────────────────── */
+input[type='checkbox'].gold-check:checked {
+  accent-color: #C9A96E;
+}
+
+/* ─── Tooltip ───────────────────────────────────────────── */
+.tooltip {
+  position: relative;
+}
+.tooltip::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: #1A1A1A;
+  color: #fff;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 100;
+}
+.tooltip:hover::after { opacity: 1; }
+
+/* ─── Glow effect ─────────────────────────────────────── */
+.glow-gold {
+  box-shadow: 0 0 24px rgba(201,169,110,0.35);
+}
