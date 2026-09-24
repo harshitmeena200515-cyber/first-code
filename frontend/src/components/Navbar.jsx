@@ -13,7 +13,6 @@ const NAV_LINKS = [
   { label: 'Fashion Guide',  to: '/guide' },
   { label: 'Outfit Builder', to: '/outfit-builder' },
   { label: 'Quiz',           to: '/quiz' },
-  { label: 'Admin',          to: '/admin' },
 ]
 
 export default function Navbar({ darkMode, toggleDark }) {
