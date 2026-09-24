@@ -13,10 +13,13 @@ import Favorites   from './pages/Favorites.jsx'
 import OutfitBuilder from './pages/OutfitBuilder.jsx'
 import Admin       from './pages/Admin.jsx'
 import Deals       from './pages/Deals.jsx'
-import ListingAnalyzer from './pages/ListingAnalyzer';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import TermsOfService from './pages/TermsOfService';
-import AffiliateDisclosure from './pages/AffiliateDisclosure';
+import ListingAnalyzer from './pages/ListingAnalyzer'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import TermsOfService from './pages/TermsOfService'
+import AffiliateDisclosure from './pages/AffiliateDisclosure'
+import AboutUs from './pages/AboutUs'
+import ContactUs from './pages/ContactUs'
+import CookiePolicy from './pages/CookiePolicy'
 export default function App() {
   const [dark, setDark] = useState(() => {
     if (typeof window === 'undefined') return false
@@ -47,10 +50,13 @@ export default function App() {
           <Route path="/outfit-builder"                    element={<OutfitBuilder />} />
           <Route path="/admin"                             element={<Admin />} />
           <Route path="/deals"                             element={<Deals />} />
-          <Route path="/analyze" element={<ListingAnalyzer />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms-of-service" element={<TermsOfService />} />
-          <Route path="/affiliate-disclosure" element={<AffiliateDisclosure />} />
+          <Route path="/analyze"                           element={<ListingAnalyzer />} />
+          <Route path="/about"                             element={<AboutUs />} />
+          <Route path="/contact"                           element={<ContactUs />} />
+          <Route path="/privacy-policy"                    element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service"                  element={<TermsOfService />} />
+          <Route path="/affiliate-disclosure"              element={<AffiliateDisclosure />} />
+          <Route path="/cookie-policy"                     element={<CookiePolicy />} />
           <Route path="*" element={
             <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
               <span className="text-6xl">404</span>
@@ -60,24 +66,37 @@ export default function App() {
           } />
         </Routes>
 
-        <footer className="bg-charcoal text-gray-400 text-center py-8 text-sm mt-16">
-          <p className="mb-1">
-            <span className="font-display text-white font-semibold">FashionDB</span> — Premium Clothing Catalog & E-commerce Reality Check
-          </p>
-          <p className="text-xs text-gray-600 mb-4">
-            Built with FastAPI + React · Trust scores powered by pHash & EXIF analysis
-          </p>
-          <div className="flex justify-center gap-4 text-xs text-gray-500 mb-2">
-            <a href="/privacy-policy" className="hover:text-gold transition-colors">Privacy Policy</a>
-            <a href="/terms-of-service" className="hover:text-gold transition-colors">Terms of Service</a>
-            <a href="/affiliate-disclosure" className="hover:text-gold transition-colors">Affiliate Disclosure</a>
+        <footer className="bg-charcoal text-gray-400 text-center py-10 text-sm mt-16 border-t border-gray-800">
+          <div className="max-w-7xl mx-auto px-6">
+            <p className="mb-2 text-base font-semibold text-white">
+              <span className="font-display">FashionDB</span> — Curated Indian Fashion & E-commerce Reality Check
+            </p>
+            <p className="text-xs text-gray-400 mb-6 max-w-2xl mx-auto leading-relaxed">
+              Discover verified fashion across Amazon, Flipkart, Myntra, Meesho, and Ajio. Powered by real review photo analysis, trust scoring, and independent styling guides.
+            </p>
+
+            <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-xs font-medium text-gray-300 mb-6">
+              <a href="/about" className="hover:text-gold transition-colors">About Us</a>
+              <span className="text-gray-600">·</span>
+              <a href="/contact" className="hover:text-gold transition-colors">Contact Us</a>
+              <span className="text-gray-600">·</span>
+              <a href="/privacy-policy" className="hover:text-gold transition-colors">Privacy Policy</a>
+              <span className="text-gray-600">·</span>
+              <a href="/terms-of-service" className="hover:text-gold transition-colors">Terms & Conditions</a>
+              <span className="text-gray-600">·</span>
+              <a href="/affiliate-disclosure" className="hover:text-gold transition-colors">Affiliate Disclosure</a>
+              <span className="text-gray-600">·</span>
+              <a href="/cookie-policy" className="hover:text-gold transition-colors">Cookie Policy</a>
+            </div>
+
+            <div className="p-3 rounded-xl bg-black/40 border border-gray-800/80 max-w-xl mx-auto mb-4 text-[11px] text-gray-400">
+              <strong className="text-gold">Affiliate Disclaimer:</strong> As an Amazon Associate, and an affiliate partner with Flipkart, Myntra, Meesho, and Ajio, we earn qualifying commissions from purchases made via our outbound links, at zero extra cost to you.
+            </div>
+
+            <p className="text-xs text-gray-500">
+              © {new Date().getFullYear()} FashionDB. Built with pride in India. All rights reserved.
+            </p>
           </div>
-          <p className="text-xs text-gray-500 mb-2">
-            As an Amazon Associate I earn from qualifying purchases.
-          </p>
-          <p className="text-xs text-gray-600">
-            © 2024 FashionDB (8clothes). All rights reserved.
-          </p>
         </footer>
 
         <Toaster

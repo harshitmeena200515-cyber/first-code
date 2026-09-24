@@ -193,16 +193,27 @@ export default function ItemDetail() {
                 <FiHeart className={fav ? 'fill-current' : ''} /> {fav ? 'Saved' : 'Save'}
               </button>
 
-              {item.external_link && (
-                <a
-                  href={`/api/affiliate/redirect/${item.id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 px-5 py-3 rounded-2xl gradient-gold text-charcoal font-semibold text-sm hover:shadow-gold hover:scale-[1.02] active:scale-95 transition-all"
-                >
-                  <FiExternalLink className="w-4 h-4" /> Buy Now
-                </a>
-              )}
+              {item.external_link && (() => {
+                const url = (item.external_link || '').toLowerCase()
+                let platform = 'Store'
+                let btnStyle = 'gradient-gold text-charcoal'
+                if (url.includes('amazon')) { platform = 'Amazon'; btnStyle = 'bg-[#FF9900] hover:bg-[#E68A00] text-black' }
+                else if (url.includes('flipkart')) { platform = 'Flipkart'; btnStyle = 'bg-[#2874F0] hover:bg-[#1C5EC8] text-white' }
+                else if (url.includes('myntra')) { platform = 'Myntra'; btnStyle = 'bg-gradient-to-r from-[#FF3F6C] to-[#F13AB1] text-white' }
+                else if (url.includes('meesho')) { platform = 'Meesho'; btnStyle = 'bg-[#9B256B] hover:bg-[#801D56] text-white' }
+                else if (url.includes('ajio')) { platform = 'Ajio'; btnStyle = 'bg-[#2C4152] hover:bg-[#20313E] text-white' }
+
+                return (
+                  <a
+                    href={`/api/affiliate/redirect/${item.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`flex-1 flex items-center justify-center gap-2 px-5 py-3 rounded-2xl font-bold text-sm shadow-md hover:scale-[1.02] active:scale-95 transition-all ${btnStyle}`}
+                  >
+                    <FiExternalLink className="w-4 h-4" /> Buy on {platform}
+                  </a>
+                )
+              })()}
 
               <button
                 onClick={() => navigator.share?.({ title: item.name, url: location.href })}

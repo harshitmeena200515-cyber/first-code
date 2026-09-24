@@ -56,18 +56,26 @@ export default function AffiliateDisclosure() {
 
         <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <h2 className="font-display text-3xl font-bold text-charcoal dark:text-cream mb-6 text-center">3. Platforms We Partner With</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white dark:bg-charcoal p-6 rounded-2xl shadow-card text-center border border-border dark:border-gray-800">
-              <div className="font-bold text-xl mb-2 text-amber-500">Amazon Associates</div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">As an Amazon Associate we earn from qualifying purchases.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className="bg-white dark:bg-charcoal p-5 rounded-2xl shadow-card text-center border border-border dark:border-gray-800">
+              <div className="font-bold text-lg mb-1 text-amber-500">Amazon.in</div>
+              <p className="text-xs text-gray-600 dark:text-gray-400">Amazon Associates Program participant.</p>
             </div>
-            <div className="bg-white dark:bg-charcoal p-6 rounded-2xl shadow-card text-center border border-border dark:border-gray-800">
-              <div className="font-bold text-xl mb-2 text-blue-600">Flipkart Affiliate</div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">We earn commissions on sales generated through our links to Flipkart.</p>
+            <div className="bg-white dark:bg-charcoal p-5 rounded-2xl shadow-card text-center border border-border dark:border-gray-800">
+              <div className="font-bold text-lg mb-1 text-blue-600">Flipkart</div>
+              <p className="text-xs text-gray-600 dark:text-gray-400">Flipkart Affiliate Network referral partner.</p>
             </div>
-            <div className="bg-white dark:bg-charcoal p-6 rounded-2xl shadow-card text-center border border-border dark:border-gray-800">
-              <div className="font-bold text-xl mb-2 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-red-500">Myntra Partner</div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">We earn a referral fee for qualifying purchases on Myntra.</p>
+            <div className="bg-white dark:bg-charcoal p-5 rounded-2xl shadow-card text-center border border-border dark:border-gray-800">
+              <div className="font-bold text-lg mb-1 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-red-500">Myntra</div>
+              <p className="text-xs text-gray-600 dark:text-gray-400">Myntra fashion affiliate program partner.</p>
+            </div>
+            <div className="bg-white dark:bg-charcoal p-5 rounded-2xl shadow-card text-center border border-border dark:border-gray-800">
+              <div className="font-bold text-lg mb-1 text-pink-600">Meesho</div>
+              <p className="text-xs text-gray-600 dark:text-gray-400">Meesho seller and reselling affiliate partner.</p>
+            </div>
+            <div className="bg-white dark:bg-charcoal p-5 rounded-2xl shadow-card text-center border border-border dark:border-gray-800">
+              <div className="font-bold text-lg mb-1 text-amber-600">Ajio</div>
+              <p className="text-xs text-gray-600 dark:text-gray-400">Reliance Ajio fashion affiliate network partner.</p>
             </div>
           </div>
         </motion.section>
@@ -91,14 +99,14 @@ export default function AffiliateDisclosure() {
         <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <h2 className="font-display text-2xl font-bold text-charcoal dark:text-cream mb-4">5. How to Identify Affiliate Links</h2>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-            For simplicity and transparency, you should assume that any link leading to an e-commerce platform (like Amazon, Flipkart, or Myntra) is an affiliate link. We use these links universally across product pages, deal lists, and outfit recommendations.
+            For simplicity and transparency, you should assume that any link leading to an external e-commerce platform (like Amazon, Flipkart, Myntra, Meesho, or Ajio) is an affiliate referral link.
           </p>
         </motion.section>
 
         <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <h2 className="font-display text-2xl font-bold text-charcoal dark:text-cream mb-4">6. Questions?</h2>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            If you have any questions regarding our affiliate relationships, please reach out to us — <em className="text-gold">contact details will be updated here soon</em>.
+            If you have any questions regarding our affiliate relationships, please visit our <a href="/contact" className="text-gold font-semibold underline">Contact Us</a> page or email us at <a href="mailto:support@fashiondb.in" className="text-gold underline">support@fashiondb.in</a>.
           </p>
         </motion.section>
 

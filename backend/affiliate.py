@@ -14,10 +14,12 @@ from datetime import datetime
 AFFILIATE_CONFIG = {
     'amazon':   {'param': 'tag',    'value': os.getenv('AMAZON_AFFILIATE_TAG', ''),   'base_search': 'https://www.amazon.in/s?k='},
     'flipkart': {'param': 'affid',  'value': os.getenv('FLIPKART_AFFILIATE_ID', ''),  'base_search': 'https://www.flipkart.com/search?q='},
-    'myntra':   {'utm_source': os.getenv('MYNTRA_UTM_SOURCE', ''), 'utm_medium': 'affiliate', 'base_search': 'https://www.myntra.com/search?q='}
+    'myntra':   {'utm_source': os.getenv('MYNTRA_UTM_SOURCE', ''), 'utm_medium': 'affiliate', 'base_search': 'https://www.myntra.com/search?q='},
+    'meesho':   {'param': 'ref',    'value': os.getenv('MEESHO_REF_CODE', ''),       'base_search': 'https://www.meesho.com/search?q='},
+    'ajio':     {'utm_source': os.getenv('AJIO_UTM_SOURCE', ''), 'utm_medium': 'affiliate', 'base_search': 'https://www.ajio.com/search/?text='}
 }
 
-CONTACT_EMAIL = os.getenv('CONTACT_EMAIL', '')   # empty = "not yet configured"
+CONTACT_EMAIL = os.getenv('CONTACT_EMAIL', 'support@fashiondb.in')
 
 def detect_platform_from_url(url: str) -> str:
     if not url:
@@ -29,6 +31,10 @@ def detect_platform_from_url(url: str) -> str:
         return 'flipkart'
     elif 'myntra' in domain:
         return 'myntra'
+    elif 'meesho' in domain:
+        return 'meesho'
+    elif 'ajio' in domain:
+        return 'ajio'
     return 'unknown'
 
 def generate_affiliate_link(base_url: str, platform: str) -> str:
@@ -38,7 +44,7 @@ def generate_affiliate_link(base_url: str, platform: str) -> str:
 
     config = AFFILIATE_CONFIG[platform]
 
-    if platform in ['amazon', 'flipkart']:
+    if platform in ['amazon', 'flipkart', 'meesho']:
         affiliate_value = config.get('value', '')
         if not affiliate_value:          # ID not configured — return URL as-is
             return base_url
@@ -49,14 +55,14 @@ def generate_affiliate_link(base_url: str, platform: str) -> str:
         return urllib.parse.urlunparse(
             (parsed.scheme, parsed.netloc, parsed.path, parsed.params, new_query, parsed.fragment)
         )
-    elif platform == 'myntra':
+    elif platform in ['myntra', 'ajio']:
         utm_source = config.get('utm_source', '')
         if not utm_source:               # UTM source not configured — return as-is
             return base_url
         parsed = urllib.parse.urlparse(base_url)
         query_params = urllib.parse.parse_qs(parsed.query)
         query_params['utm_source'] = [utm_source]
-        query_params['utm_medium'] = [config['utm_medium']]
+        query_params['utm_medium'] = [config.get('utm_medium', 'affiliate')]
         new_query = urllib.parse.urlencode(query_params, doseq=True)
         return urllib.parse.urlunparse(
             (parsed.scheme, parsed.netloc, parsed.path, parsed.params, new_query, parsed.fragment)
