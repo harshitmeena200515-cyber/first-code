@@ -10,17 +10,27 @@ function HeroParticles() {
   const canvasRef = useRef(null)
   useEffect(() => {
     const canvas = canvasRef.current
-    const ctx    = canvas.getContext('2d')
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
     let raf
-    const resize = () => { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight }
+    const resize = () => { 
+      if (!canvas) return
+      canvas.width = canvas.offsetWidth || window.innerWidth || 300
+      canvas.height = canvas.offsetHeight || window.innerHeight || 300
+    }
     resize()
     window.addEventListener('resize', resize)
     const particles = Array.from({ length: 60 }, () => ({
-      x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-      r: Math.random() * 2 + 0.5, vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
+      x: Math.random() * (canvas.width || 300), 
+      y: Math.random() * (canvas.height || 300),
+      r: Math.random() * 2 + 0.5, 
+      vx: (Math.random() - 0.5) * 0.4, 
+      vy: (Math.random() - 0.5) * 0.4,
       a: Math.random(),
     }))
     const draw = () => {
+      if (!ctx || !canvas) return
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       particles.forEach(p => {
         p.x += p.vx; p.y += p.vy
@@ -42,10 +52,11 @@ function Counter({ target, suffix = '' }) {
   const [val, setVal] = useState(0)
   useEffect(() => {
     let start = 0
-    const step = target / 50
+    const t = Number(target) || 0
+    const step = Math.max(1, t / 50)
     const id = setInterval(() => {
       start += step
-      if (start >= target) { setVal(target); clearInterval(id) } else setVal(Math.floor(start))
+      if (start >= t) { setVal(t); clearInterval(id) } else setVal(Math.floor(start))
     }, 30)
     return () => clearInterval(id)
   }, [target])
@@ -91,9 +102,9 @@ export default function Home() {
   const [tab,      setTab]        = useState('boys')
 
   useEffect(() => {
-    fetchTrending({ limit: 8 }).then(r => setTrending(r.data)).catch(() => {})
-    fetchNewArrivals({ limit: 6 }).then(r => setArrivals(r.data)).catch(() => {})
-    fetchStats().then(r => setStats(r.data)).catch(() => {})
+    fetchTrending({ limit: 8 }).then(r => { if (Array.isArray(r.data)) setTrending(r.data) }).catch(() => {})
+    fetchNewArrivals({ limit: 6 }).then(r => { if (Array.isArray(r.data)) setArrivals(r.data) }).catch(() => {})
+    fetchStats().then(r => { if (r.data && typeof r.data === 'object' && !Array.isArray(r.data)) setStats(r.data) }).catch(() => {})
   }, [])
 
   const { scrollY } = useScroll()
@@ -264,7 +275,7 @@ export default function Home() {
                   key={g}
                   onClick={() => {
                     setTab(g)
-                    fetchTrending({ gender: g, limit: 8 }).then(r => setTrending(r.data)).catch(() => {})
+                    fetchTrending({ gender: g, limit: 8 }).then(r => { if (Array.isArray(r.data)) setTrending(r.data) }).catch(() => {})
                   }}
                   className={`px-5 py-2 text-sm font-medium transition-colors capitalize
                     ${tab === g ? 'bg-gold text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-charcoal-light'}`}
@@ -275,7 +286,7 @@ export default function Home() {
             </div>
           </div>
 
-          {trending.length > 0 ? (
+          {Array.isArray(trending) && trending.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-5">
               {trending.map((item, i) => <ClothingCard key={item.id} item={item} index={i} />)}
             </div>

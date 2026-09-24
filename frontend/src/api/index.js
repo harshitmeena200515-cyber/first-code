@@ -1,6 +1,9 @@
 import axios from 'axios'
 
-const api = axios.create({ baseURL: '/api' })
+const api = axios.create({ 
+  baseURL: import.meta.env.VITE_API_URL || '/api',
+  timeout: 10000 
+})
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('admin_token');
@@ -9,6 +12,17 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+api.interceptors.response.use(
+  (response) => {
+    if (typeof response.data === 'string' && (response.data.trim().startsWith('<!DOCTYPE') || response.data.trim().startsWith('<html'))) {
+      return Promise.reject(new Error('Backend API returned HTML instead of JSON'))
+    }
+    return response
+  },
+  (error) => Promise.reject(error)
+)
+
 // ─── Products ──────────────────────────────────────────────────────
 export const fetchClothes    = (params = {}) => api.get('/clothes', { params })
 export const fetchCloth      = (id)          => api.get(`/clothes/${id}`)
@@ -31,32 +45,48 @@ export const analyzeImage       = (form)    => api.post('/analyze-image', form)
 export const fetchReviews       = (id)      => api.get(`/clothes/${id}/reviews`)
 
 // ─── Favorites (localStorage) ─────────────────────────────────────
-export const getFavorites   = ()   => JSON.parse(localStorage.getItem('fav_ids') || '[]')
+export const getFavorites   = ()   => {
+  try { return JSON.parse(localStorage.getItem('fav_ids') || '[]') } catch { return [] }
+}
 export const addFavorite    = (id) => {
-  const favs = getFavorites()
-  if (!favs.includes(id)) localStorage.setItem('fav_ids', JSON.stringify([...favs, id]))
+  try {
+    const favs = getFavorites()
+    if (!favs.includes(id)) localStorage.setItem('fav_ids', JSON.stringify([...favs, id]))
+  } catch {}
 }
 export const removeFavorite = (id) => {
-  localStorage.setItem('fav_ids', JSON.stringify(getFavorites().filter(f => f !== id)))
+  try {
+    localStorage.setItem('fav_ids', JSON.stringify(getFavorites().filter(f => f !== id)))
+  } catch {}
 }
 export const isFavorite     = (id) => getFavorites().includes(id)
 
 // ─── Recently Viewed (localStorage) ───────────────────────────────
-export const getRecentlyViewed = () => JSON.parse(localStorage.getItem('recently_viewed') || '[]')
+export const getRecentlyViewed = () => {
+  try { return JSON.parse(localStorage.getItem('recently_viewed') || '[]') } catch { return [] }
+}
 export const addRecentlyViewed = (item) => {
-  const recent = getRecentlyViewed().filter(r => r.id !== item.id)
-  localStorage.setItem('recently_viewed', JSON.stringify([item, ...recent].slice(0, 12)))
+  try {
+    const recent = getRecentlyViewed().filter(r => r.id !== item.id)
+    localStorage.setItem('recently_viewed', JSON.stringify([item, ...recent].slice(0, 12)))
+  } catch {}
 }
 
 // ─── Compare (localStorage) ───────────────────────────────────────
-export const getCompare    = () => JSON.parse(localStorage.getItem('compare_ids') || '[]')
+export const getCompare    = () => {
+  try { return JSON.parse(localStorage.getItem('compare_ids') || '[]') } catch { return [] }
+}
 export const addCompare    = (id) => {
-  const c = getCompare()
-  if (c.length >= 3) { alert('Max 3 items for comparison'); return }
-  if (!c.includes(id)) localStorage.setItem('compare_ids', JSON.stringify([...c, id]))
+  try {
+    const c = getCompare()
+    if (c.length >= 3) { alert('Max 3 items for comparison'); return }
+    if (!c.includes(id)) localStorage.setItem('compare_ids', JSON.stringify([...c, id]))
+  } catch {}
 }
 export const removeCompare = (id) => {
-  localStorage.setItem('compare_ids', JSON.stringify(getCompare().filter(c => c !== id)))
+  try {
+    localStorage.setItem('compare_ids', JSON.stringify(getCompare().filter(c => c !== id)))
+  } catch {}
 }
 
 // ─── Outfit (localStorage) ────────────────────────────────────────
