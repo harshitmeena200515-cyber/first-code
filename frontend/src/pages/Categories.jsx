@@ -23,14 +23,16 @@ export default function Categories() {
 
   useEffect(() => {
     setSelCat(null)
-    fetchCategories({ gender }).then(r => setCats(r.data)).catch(() => {})
+    fetchCategories({ gender })
+      .then(r => setCats(Array.isArray(r.data) ? r.data : []))
+      .catch(() => setCats([]))
   }, [gender])
 
   useEffect(() => {
     if (!selCat) return
     fetchSubcats({ gender, category: selCat })
-      .then(r => setSubcats(r.data))
-      .catch(() => {})
+      .then(r => setSubcats(Array.isArray(r.data) ? r.data : []))
+      .catch(() => setSubcats([]))
   }, [selCat, gender])
 
   useEffect(() => {
@@ -42,10 +44,11 @@ export default function Categories() {
       sort: 'popular'
     })
       .then(r => {
-        const list = Array.isArray(r.data) ? r.data : (r.data?.items || [])
+        const raw = r.data
+        const list = Array.isArray(raw) ? raw : (Array.isArray(raw?.items) ? raw.items : [])
         setItems(list)
       })
-      .catch(() => {})
+      .catch(() => setItems([]))
       .finally(() => setLoadingItems(false))
   }, [gender, selCat])
 
@@ -84,7 +87,7 @@ export default function Categories() {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-5 mb-14">
           {Object.entries(CATEGORY_META).map(([key, meta], i) => {
-            const count = cats.find(c => c.category === key)?.count || 0
+            const count = (Array.isArray(cats) ? cats : []).find(c => c?.category === key)?.count || 0
             return (
               <motion.button
                 key={key}

@@ -135,10 +135,16 @@ export default function Gallery() {
         skin_tone:  skinTone || undefined,
       }
       const res = await fetchClothes(params)
-      setItems(res.data.items)
-      setTotal(res.data.total)
-      setPages(res.data.total_pages)
+      const raw = res.data
+      const itemsList = Array.isArray(raw?.items) ? raw.items : (Array.isArray(raw) ? raw : [])
+      setItems(itemsList)
+      setTotal(raw?.total || itemsList.length)
+      setPages(raw?.total_pages || 1)
       setPage(p)
+    } catch {
+      setItems([])
+      setTotal(0)
+      setPages(1)
     } finally {
       setLoading(false)
     }
