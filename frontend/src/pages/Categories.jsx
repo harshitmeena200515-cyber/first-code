@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiArrowRight } from 'react-icons/fi'
-import { fetchCategories, fetchSubcats } from '../api'
+import { fetchCategories, fetchSubcats, fetchClothes } from '../api'
+import ClothingCard from '../components/ClothingCard'
 
 const CATEGORY_META = {
   upperwear:   { icon: '👕', label: 'Upper Wear',  desc: 'Tops, shirts, jackets & more' },
@@ -17,6 +18,8 @@ export default function Categories() {
   const [cats,    setCats]    = useState([])
   const [selCat,  setSelCat]  = useState(null)
   const [subcats, setSubcats] = useState([])
+  const [items,        setItems]        = useState([])
+  const [loadingItems, setLoadingItems] = useState(true)
 
   useEffect(() => {
     fetchCategories({ gender }).then(r => setCats(r.data)).catch(() => {})
@@ -28,6 +31,22 @@ export default function Categories() {
       .then(r => setSubcats(r.data))
       .catch(() => {})
   }, [selCat, gender])
+
+  useEffect(() => {
+    setLoadingItems(true)
+    fetchClothes({
+      gender: gender === 'all' ? undefined : gender,
+      category: selCat || undefined,
+      limit: 12,
+      sort: 'popular'
+    })
+      .then(r => {
+        const list = Array.isArray(r.data) ? r.data : (r.data?.items || [])
+        setItems(list)
+      })
+      .catch(() => {})
+      .finally(() => setLoadingItems(false))
+  }, [gender, selCat])
 
   const genderLabel = gender?.charAt(0).toUpperCase() + gender?.slice(1)
 
@@ -49,7 +68,7 @@ export default function Categories() {
               <span className="text-white capitalize">{gender}</span>
             </nav>
             <h1 className="font-display text-4xl font-bold text-white">
-              {genderLabel}'s{' '}
+              {genderLabel.endsWith('s') ? `${genderLabel}'` : `${genderLabel}'s`}{' '}
               <span className="gradient-text">Fashion</span>
             </h1>
           </div>
@@ -149,6 +168,55 @@ export default function Categories() {
             ))}
           </div>
         )}
+
+        {/* ── Products Grid ── */}
+        <div className="mt-14 pt-10 border-t border-border/80 dark:border-gray-800">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-8">
+            <div>
+              <p className="text-gold text-xs font-semibold uppercase tracking-widest mb-1">
+                {selCat ? CATEGORY_META[selCat]?.label : 'Featured Collection'}
+              </p>
+              <h3 className="font-display text-2xl sm:text-3xl font-bold text-charcoal dark:text-cream">
+                {selCat ? `${CATEGORY_META[selCat]?.label} for ${genderLabel}` : `Popular in ${genderLabel.endsWith('s') ? `${genderLabel}'` : `${genderLabel}'s`} Fashion`}
+              </h3>
+            </div>
+            <Link
+              to={`/gallery/${gender}/${selCat || 'all'}`}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-gold text-gold hover:bg-gold hover:text-white transition-all text-xs font-semibold"
+            >
+              Explore Full Gallery with Filters ({items.length}+ Items) <FiArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          {loadingItems ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="rounded-2xl overflow-hidden">
+                  <div className="shimmer-bg aspect-[3/4] rounded-2xl" />
+                  <div className="shimmer-bg h-4 mt-2 rounded w-3/4" />
+                  <div className="shimmer-bg h-3 mt-1 rounded w-1/2" />
+                </div>
+              ))}
+            </div>
+          ) : items.length > 0 ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+              {items.map((item, i) => (
+                <ClothingCard key={item.id} item={item} index={i} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16 bg-white dark:bg-charcoal-light/30 rounded-2xl border border-border dark:border-gray-800">
+              <p className="text-4xl mb-3">👗</p>
+              <p className="text-sm font-semibold text-charcoal dark:text-cream mb-2">No products found in this category yet</p>
+              <Link
+                to={`/gallery/${gender}/all`}
+                className="text-xs text-gold hover:underline font-semibold"
+              >
+                View all items in {genderLabel.endsWith('s') ? `${genderLabel}'` : `${genderLabel}'s`} collection →
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

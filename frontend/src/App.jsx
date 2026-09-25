@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 
 import Navbar      from './components/Navbar.jsx'
@@ -70,7 +70,7 @@ export default function App() {
               <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
                 <span className="text-6xl">404</span>
                 <p className="text-gray-500 dark:text-gray-400">Page not found</p>
-                <a href="/" className="text-gold hover:underline">← Go home</a>
+                <Link to="/" className="text-gold hover:underline">← Go home</Link>
               </div>
             } />
           </Routes>
@@ -96,12 +96,12 @@ export default function App() {
               <div className="text-center sm:text-left">
                 <p className="text-sm font-semibold text-white mb-3">Quick Links</p>
                 <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-                  <a href="/about" className="hover:text-gold transition-colors">About Us</a>
-                  <a href="/contact" className="hover:text-gold transition-colors">Contact Us</a>
-                  <a href="/privacy-policy" className="hover:text-gold transition-colors">Privacy Policy</a>
-                  <a href="/terms-of-service" className="hover:text-gold transition-colors">Terms & Conditions</a>
-                  <a href="/affiliate-disclosure" className="hover:text-gold transition-colors">Affiliate Disclosure</a>
-                  <a href="/cookie-policy" className="hover:text-gold transition-colors">Cookie Policy</a>
+                  <Link to="/about" className="hover:text-gold transition-colors">About Us</Link>
+                  <Link to="/contact" className="hover:text-gold transition-colors">Contact Us</Link>
+                  <Link to="/privacy-policy" className="hover:text-gold transition-colors">Privacy Policy</Link>
+                  <Link to="/terms-of-service" className="hover:text-gold transition-colors">Terms & Conditions</Link>
+                  <Link to="/affiliate-disclosure" className="hover:text-gold transition-colors">Affiliate Disclosure</Link>
+                  <Link to="/cookie-policy" className="hover:text-gold transition-colors">Cookie Policy</Link>
                 </div>
               </div>
 
