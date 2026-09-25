@@ -20,6 +20,11 @@ export default function Admin() {
   const [authError, setAuthError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
 
+  const [importUrl, setImportUrl] = useState('')
+  const [importGender, setImportGender] = useState('boys')
+  const [importing, setImporting] = useState(false)
+  const [importStatus, setImportStatus] = useState(null)
+
   useEffect(() => {
     if (isAuthenticated) {
       fetchStats().then(r => setStats(r.data)).catch(() => {})
@@ -77,6 +82,36 @@ export default function Admin() {
   const handleEdit = (item) => {
     setEditItem(item);
     setShowForm(true);
+  };
+
+  const handleImportUrl = async (e) => {
+    e.preventDefault();
+    if (!importUrl) return;
+    setImporting(true);
+    setImportStatus(null);
+    try {
+      const res = await fetch('/api/admin/import-url', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('admin_token') || 'true'}`
+        },
+        body: JSON.stringify({ url: importUrl.trim(), gender: importGender })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setImportStatus({ type: 'success', message: `✅ ${data.message || 'Product imported successfully!'}` });
+        setImportUrl('');
+        load(1);
+        fetchStats().then(r => setStats(r.data)).catch(() => {});
+      } else {
+        setImportStatus({ type: 'error', message: `❌ ${data.detail || data.message || 'Import failed. Please check the URL.'}` });
+      }
+    } catch (err) {
+      setImportStatus({ type: 'error', message: '❌ Network error connecting to backend.' });
+    } finally {
+      setImporting(false);
+    }
   };
 
   const handleLogout = () => {
@@ -186,6 +221,55 @@ export default function Admin() {
               Logout
             </button>
           </div>
+        </div>
+
+        {/* ── 1-Click Magic Link Importer (EarnKaro / Flipkart / Myntra / Amazon) ── */}
+        <div className="bg-gradient-to-r from-amber-500/10 via-gold/10 to-amber-500/5 border border-gold/40 rounded-3xl p-6 shadow-card mb-8">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="px-2.5 py-0.5 rounded-full bg-gold text-charcoal font-bold text-[10px] uppercase tracking-wider">
+              EarnKaro & Store Importer
+            </span>
+            <span className="text-xs text-gray-500 dark:text-gray-400">Paste & publish instantly</span>
+          </div>
+          <h2 className="font-display text-xl font-bold text-charcoal dark:text-cream mb-2">
+            ⚡ 1-Click Product Auto-Importer
+          </h2>
+          <p className="text-xs text-gray-600 dark:text-gray-400 mb-4 max-w-2xl">
+            Paste any EarnKaro link (<code className="text-gold font-mono">https://fktr.in/...</code>, <code className="text-gold font-mono">https://myntr.it/...</code>), Flipkart, Myntra, or Amazon product URL. Our engine automatically extracts the title, price, images, brand, and attaches your affiliate link.
+          </p>
+
+          <form onSubmit={handleImportUrl} className="flex flex-col sm:flex-row gap-3">
+            <input
+              value={importUrl}
+              onChange={e => setImportUrl(e.target.value)}
+              placeholder="Paste EarnKaro profit link or product URL here..."
+              required
+              className="flex-1 px-4 py-3 rounded-xl bg-white dark:bg-charcoal border border-border dark:border-gray-700 text-sm focus:ring-2 focus:ring-gold/50 focus:outline-none dark:text-cream"
+            />
+            <select
+              value={importGender}
+              onChange={e => setImportGender(e.target.value)}
+              className="px-4 py-3 rounded-xl bg-white dark:bg-charcoal border border-border dark:border-gray-700 text-sm focus:ring-2 focus:ring-gold/50 focus:outline-none dark:text-cream"
+            >
+              <option value="boys">Boys</option>
+              <option value="girls">Girls</option>
+              <option value="men">Men</option>
+              <option value="women">Women</option>
+            </select>
+            <button
+              type="submit"
+              disabled={importing}
+              className="px-6 py-3 rounded-xl gradient-gold text-charcoal font-bold text-sm hover:shadow-gold active:scale-95 transition-all disabled:opacity-50 shrink-0 flex items-center justify-center gap-2"
+            >
+              {importing ? 'Importing...' : '⚡ Import & Publish'}
+            </button>
+          </form>
+
+          {importStatus && (
+            <p className={`mt-3 text-xs font-semibold ${importStatus.type === 'error' ? 'text-red-500' : 'text-emerald-600 dark:text-emerald-400'}`}>
+              {importStatus.message}
+            </p>
+          )}
         </div>
 
         {/* Stats */}

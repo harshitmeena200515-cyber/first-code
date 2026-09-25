@@ -514,6 +514,67 @@ def affiliate_stats(db: Session = Depends(get_db)):
         "by_platform": [{"platform": r[0], "count": r[1]} for r in by_platform]
     }
 
+
+class ImportURLRequest(BaseModel):
+    url: str
+    gender: Optional[str] = None
+
+
+@app.post("/api/admin/import-url")
+def import_product_url(
+    payload: ImportURLRequest,
+    db: Session = Depends(get_db),
+    authorized: bool = Depends(verify_admin)
+):
+    try:
+        from product_importer import fetch_and_parse_product
+        data = fetch_and_parse_product(payload.url, override_gender=payload.gender)
+        
+        # Check if product already exists with same external_link
+        existing = db.query(Product).filter(Product.external_link == data["external_link"]).first()
+        if existing:
+            return {"status": "exists", "product": _parse(existing), "message": "Product already exists in catalogue"}
+            
+        prod = Product(
+            name=data["name"],
+            gender=data["gender"],
+            category=data["category"],
+            subcategory=data["subcategory"],
+            style=data["style"],
+            color=data["color"],
+            fabric=data["fabric"],
+            season=data["season"],
+            occasion=data["occasion"],
+            brand=data["brand"],
+            price=data["price"],
+            description=data["description"],
+            image_path=data["image_path"],
+            customer_photo=data.get("customer_photo") or data["image_path"],
+            external_link=data["external_link"],
+            body_type_suitability=json.dumps(data.get("body_type_suitability", ["All"])),
+            skin_tone_suitability=json.dumps(data.get("skin_tone_suitability", ["All"])),
+            age_group=data.get("age_group", "All"),
+            comfort_level=data.get("comfort_level", "High"),
+            trend_score=data.get("trend_score", 90.0),
+            popularity=data.get("popularity", 85.0),
+            rating=data.get("rating", 4.5),
+            review_count=data.get("review_count", 100),
+            trust_score=data.get("trust_score", 85.0),
+            is_verified=True,
+            styling_tips=json.dumps(data.get("styling_tips", [])),
+            matching_items=json.dumps(data.get("matching_items", [])),
+            dos=json.dumps(data.get("dos", [])),
+            donts=json.dumps(data.get("donts", []))
+        )
+        db.add(prod)
+        db.commit()
+        db.refresh(prod)
+        return {"status": "success", "product": _parse(prod), "message": "Product successfully imported and added to catalogue!"}
+    except Exception as e:
+        logger.error(f"Error importing product from URL: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

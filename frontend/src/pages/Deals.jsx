@@ -95,6 +95,108 @@ export default function Deals() {
           </p>
         </div>
 
+        {/* ── Featured EarnKaro Partner Deals ── */}
+        <div className="mb-12">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <p className="text-gold text-xs font-semibold uppercase tracking-widest mb-1">🔥 Top Partner Deals</p>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-charcoal dark:text-cream">
+                Limited Time Flash Steals
+              </h2>
+            </div>
+            <span className="text-xs bg-red-500/10 text-red-500 border border-red-500/20 px-3 py-1 rounded-full font-semibold">
+              Live Verified Deals
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {[
+              {
+                id: 'deal-1',
+                title: 'Adidas Performance & Streetwear Apparel',
+                brand: 'Adidas',
+                discount: 'Up to 60% OFF',
+                price: '₹1,299',
+                originalPrice: '₹3,299',
+                image: 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=600&h=800&q=80',
+                platform: 'Flipkart',
+                badgeColor: 'bg-blue-600',
+                link: 'https://fktr.in/vcHSNQr'
+              },
+              {
+                id: 'deal-2',
+                title: 'Lee Denim Jeans & Classic Cotton Shirts',
+                brand: 'Lee',
+                discount: 'Flat 79% OFF',
+                price: '₹1,049',
+                originalPrice: '₹4,999',
+                image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=600&h=800&q=80',
+                platform: 'Myntra',
+                badgeColor: 'bg-gradient-to-r from-pink-500 to-red-500',
+                link: 'https://myntr.it/1FGuX0o'
+              },
+              {
+                id: 'deal-3',
+                title: 'Woodland Rugged Nubuck Leather Outdoor Shoes',
+                brand: 'Woodland',
+                discount: 'Min 50% OFF',
+                price: '₹2,195',
+                originalPrice: '₹4,395',
+                image: 'https://images.unsplash.com/photo-1520639888713-7851133b1ed0?auto=format&fit=crop&w=600&h=800&q=80',
+                platform: 'Flipkart',
+                badgeColor: 'bg-emerald-700',
+                link: 'https://fktr.in/ij5qmh9'
+              },
+              {
+                id: 'deal-4',
+                title: 'Flipkart Big Fashion Super Saver Clearance',
+                brand: 'Flipkart Fashion',
+                discount: 'Under ₹499',
+                price: '₹499',
+                originalPrice: '₹1,499',
+                image: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=600&h=800&q=80',
+                platform: 'Flipkart',
+                badgeColor: 'bg-blue-600',
+                link: 'https://fktr.in/LNVdEws'
+              }
+            ].map(d => (
+              <div key={d.id} className="group relative bg-white dark:bg-charcoal-light rounded-3xl overflow-hidden shadow-card hover:shadow-hover transition-all duration-300 border border-border dark:border-gray-800 flex flex-col justify-between">
+                <div>
+                  <div className="relative aspect-[4/5] overflow-hidden bg-gray-100 dark:bg-charcoal">
+                    <img src={d.image} alt={d.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    <span className="absolute top-3 left-3 bg-red-600 text-white font-bold text-[11px] px-2.5 py-1 rounded-full shadow-md animate-pulse">
+                      {d.discount}
+                    </span>
+                    <span className={`absolute top-3 right-3 text-white font-semibold text-[10px] px-2.5 py-1 rounded-full shadow-md ${d.badgeColor}`}>
+                      {d.platform}
+                    </span>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-[11px] font-bold text-gold uppercase tracking-wider mb-1">{d.brand}</p>
+                    <h3 className="font-semibold text-sm text-charcoal dark:text-cream line-clamp-2 mb-2 leading-snug">
+                      {d.title}
+                    </h3>
+                    <div className="flex items-baseline gap-2 mb-3">
+                      <span className="text-lg font-bold text-charcoal dark:text-cream">{d.price}</span>
+                      <span className="text-xs text-gray-400 line-through">{d.originalPrice}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="px-4 pb-4">
+                  <a
+                    href={d.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-2.5 rounded-xl gradient-gold text-charcoal font-bold text-xs flex items-center justify-center gap-1.5 shadow hover:scale-[1.02] active:scale-95 transition-all"
+                  >
+                    <FiExternalLink className="w-3.5 h-3.5" /> Buy on {d.platform}
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Filters Panel */}
         <div className="bg-white dark:bg-charcoal-light/30 rounded-3xl p-6 shadow-card mb-8 border border-border dark:border-gray-800">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
