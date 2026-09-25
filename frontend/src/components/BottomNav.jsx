@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { FiHome, FiGrid, FiZap, FiAward, FiHeart } from 'react-icons/fi'
+import { FiHome, FiGrid, FiZap, FiTag, FiHeart } from 'react-icons/fi'
 import { getFavorites } from '../api'
 
 export default function BottomNav() {
@@ -37,10 +37,11 @@ export default function BottomNav() {
       badge: 'HOT'
     },
     {
-      label: 'Quiz',
-      to: '/quiz',
-      icon: FiAward,
-      isActive: pathname === '/quiz' || pathname === '/guide'
+      label: '< ₹499',
+      to: '/gallery/all/all?max_price=499',
+      icon: FiTag,
+      isActive: pathname.includes('max_price=499'),
+      badge: 'SALE'
     },
     {
       label: 'Saved',

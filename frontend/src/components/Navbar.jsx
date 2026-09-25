@@ -8,11 +8,11 @@ const NAV_LINKS = [
   { label: 'Home',           to: '/' },
   { label: 'Boys',           to: '/categories/boys' },
   { label: 'Girls',          to: '/categories/girls' },
-  { label: 'Deals',          to: '/deals' },
-  { label: '🔍 Analyze',     to: '/analyze' },
+  { label: '🔥 Deals',       to: '/deals' },
+  { label: 'Under ₹499',     to: '/gallery/all/all?max_price=499' },
+  { label: 'Under ₹999',     to: '/gallery/all/all?max_price=999' },
   { label: 'Fashion Guide',  to: '/guide' },
-  { label: 'Outfit Builder', to: '/outfit-builder' },
-  { label: 'Quiz',           to: '/quiz' },
+  { label: '🔍 Analyze',     to: '/analyze' },
 ]
 
 export default function Navbar({ darkMode, toggleDark }) {

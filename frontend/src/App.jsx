@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 
 import Navbar      from './components/Navbar.jsx'
@@ -54,9 +54,9 @@ export default function App() {
             <Route path="/gallery/:gender/:category/:subcategory" element={<Gallery />} />
             <Route path="/item/:id"                          element={<ItemDetail />} />
             <Route path="/guide"                             element={<Guide />} />
-            <Route path="/quiz"                              element={<Quiz />} />
+            <Route path="/quiz"                              element={<Navigate to="/deals" replace />} />
             <Route path="/favorites"                         element={<Favorites />} />
-            <Route path="/outfit-builder"                    element={<OutfitBuilder />} />
+            <Route path="/outfit-builder"                    element={<Navigate to="/guide" replace />} />
             <Route path="/admin"                             element={<Admin />} />
             <Route path="/deals"                             element={<Deals />} />
             <Route path="/analyze"                           element={<ListingAnalyzer />} />

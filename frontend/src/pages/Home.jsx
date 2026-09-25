@@ -213,10 +213,10 @@ export default function Home() {
               Explore Girls →
             </Link>
             <Link
-              to="/quiz"
-              className="px-8 py-3.5 rounded-2xl bg-white/10 backdrop-blur text-white font-semibold text-sm hover:bg-white/20 transition-all w-full sm:w-auto text-center"
+              to="/gallery/all/all?max_price=499"
+              className="px-8 py-3.5 rounded-2xl bg-amber-500/20 border border-amber-400/40 text-amber-300 font-semibold text-sm hover:bg-amber-500/30 transition-all w-full sm:w-auto text-center flex items-center justify-center gap-1.5"
             >
-              🎯 Take Fashion Quiz
+              🏷️ Under ₹499 Store
             </Link>
           </motion.div>
 
@@ -356,34 +356,122 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ════════════════════════════════ FASHION GUIDE TEASER ═══ */}
+      {/* ══════════════════ AMAZON-STYLE BUDGET STORES & DEALS ═══ */}
       <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative rounded-3xl gradient-dark overflow-hidden p-6 sm:p-10 md:p-16 text-center"
+          className="text-center mb-10"
         >
-          <HeroParticles />
-          <div className="relative z-10">
-            <FiZap className="w-10 h-10 text-gold mx-auto mb-4" />
-            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
-              Not Sure What to Wear?
-            </h2>
-            <p className="text-gray-300 text-lg max-w-xl mx-auto mb-8">
-              Our Fashion Guide covers color theory, body types, skin tones, seasons, and occasions.
-              Learn to dress like a stylist.
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              <Link to="/guide" className="px-8 py-3.5 rounded-2xl gradient-gold text-charcoal font-semibold text-sm hover:shadow-gold transition-all">
-                Explore Fashion Guide
-              </Link>
-              <Link to="/quiz" className="px-8 py-3.5 rounded-2xl border border-white/20 text-white font-semibold text-sm hover:border-gold/60 transition-all">
-                🎯 Take the Quiz
-              </Link>
-            </div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/10 text-gold text-xs font-semibold uppercase tracking-widest mb-3">
+            <FiZap /> Festival of Deals & Savings
           </div>
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-charcoal dark:text-cream mb-3">
+            Budget Stores & <span className="gradient-text">Price Steals</span>
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base max-w-2xl mx-auto">
+            Discover curated fashion deals sorted by price from Amazon India, Flipkart, Myntra, and Meesho. Verified with real customer photos.
+          </p>
         </motion.div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {/* Card 1: Under 399 */}
+          <Link
+            to="/gallery/all/all?max_price=399"
+            className="group relative rounded-3xl overflow-hidden p-6 text-white shadow-card hover:shadow-hover transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-[#800F2F] via-[#590D22] to-[#2B0913] border border-red-500/20"
+          >
+            <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase">
+              🔥 Best Value
+            </div>
+            <p className="text-xs uppercase tracking-widest text-pink-200 mb-1 font-semibold">Bestselling Kurtas & Tops</p>
+            <h3 className="font-display text-3xl sm:text-4xl font-black mb-2">Under ₹399</h3>
+            <p className="text-xs text-pink-100/80 mb-6">Top brands · Latest daily trends · Free delivery options</p>
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-pink-200 group-hover:gap-2.5 transition-all">
+              Shop Under ₹399 <FiArrowRight className="w-3.5 h-3.5" />
+            </div>
+          </Link>
+
+          {/* Card 2: Under 499 */}
+          <Link
+            to="/gallery/all/all?max_price=499"
+            className="group relative rounded-3xl overflow-hidden p-6 text-white shadow-card hover:shadow-hover transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-[#1B4332] via-[#081C15] to-[#040D0A] border border-emerald-500/20"
+          >
+            <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase">
+              ⚡ Hot Selling
+            </div>
+            <p className="text-xs uppercase tracking-widest text-emerald-200 mb-1 font-semibold">T-Shirts, Polos & Shirts</p>
+            <h3 className="font-display text-3xl sm:text-4xl font-black mb-2">Under ₹499</h3>
+            <p className="text-xs text-emerald-100/80 mb-6">Breathable cotton · Everyday essentials · Min 40% Off</p>
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-200 group-hover:gap-2.5 transition-all">
+              Shop Under ₹499 <FiArrowRight className="w-3.5 h-3.5" />
+            </div>
+          </Link>
+
+          {/* Card 3: Under 899 */}
+          <Link
+            to="/gallery/all/all?max_price=899"
+            className="group relative rounded-3xl overflow-hidden p-6 text-white shadow-card hover:shadow-hover transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-[#003566] via-[#001D3D] to-[#000814] border border-blue-500/20"
+          >
+            <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase">
+              👖 Denim Fest
+            </div>
+            <p className="text-xs uppercase tracking-widest text-blue-200 mb-1 font-semibold">Jeans, Trousers & Cargos</p>
+            <h3 className="font-display text-3xl sm:text-4xl font-black mb-2">Under ₹899</h3>
+            <p className="text-xs text-blue-100/80 mb-6">Slim, baggy & relaxed fits from Allen Solly, Levi's & Zara</p>
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-200 group-hover:gap-2.5 transition-all">
+              Shop Under ₹899 <FiArrowRight className="w-3.5 h-3.5" />
+            </div>
+          </Link>
+
+          {/* Card 4: Under 999 */}
+          <Link
+            to="/gallery/all/all?max_price=999"
+            className="group relative rounded-3xl overflow-hidden p-6 text-white shadow-card hover:shadow-hover transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-[#7B2CBF] via-[#3C096C] to-[#10002B] border border-purple-500/20"
+          >
+            <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase">
+              👟 Sneakers
+            </div>
+            <p className="text-xs uppercase tracking-widest text-purple-200 mb-1 font-semibold">Footwear & Sneakers</p>
+            <h3 className="font-display text-3xl sm:text-4xl font-black mb-2">Under ₹999</h3>
+            <p className="text-xs text-purple-100/80 mb-6">Chunky sneakers, flats, loafers & boots for boys and girls</p>
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-purple-200 group-hover:gap-2.5 transition-all">
+              Shop Under ₹999 <FiArrowRight className="w-3.5 h-3.5" />
+            </div>
+          </Link>
+
+          {/* Card 5: Starting 199 */}
+          <Link
+            to="/gallery/all/accessories"
+            className="group relative rounded-3xl overflow-hidden p-6 text-white shadow-card hover:shadow-hover transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-[#B38A38] via-[#7B5919] to-[#3E2C0B] border border-amber-500/20"
+          >
+            <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase">
+              ✨ Pocket Friendly
+            </div>
+            <p className="text-xs uppercase tracking-widest text-amber-200 mb-1 font-semibold">Caps, Belts & Watches</p>
+            <h3 className="font-display text-3xl sm:text-4xl font-black mb-2">Starting ₹199</h3>
+            <p className="text-xs text-amber-100/80 mb-6">Finish your look with trending fashion accessories & jewellery</p>
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-200 group-hover:gap-2.5 transition-all">
+              Shop Accessories <FiArrowRight className="w-3.5 h-3.5" />
+            </div>
+          </Link>
+
+          {/* Card 6: Flat 50% - 70% Off */}
+          <Link
+            to="/deals"
+            className="group relative rounded-3xl overflow-hidden p-6 text-white shadow-card hover:shadow-hover transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-[#E63946] via-[#9B1D28] to-[#45090E] border border-red-400/30"
+          >
+            <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase">
+              🎉 Mega Savings
+            </div>
+            <p className="text-xs uppercase tracking-widest text-red-200 mb-1 font-semibold">Festival Clearance Deals</p>
+            <h3 className="font-display text-3xl sm:text-4xl font-black mb-2">Flat 50% - 70% Off</h3>
+            <p className="text-xs text-red-100/80 mb-6">Reality checked discounts on Amazon, Flipkart, Myntra & Ajio</p>
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-red-200 group-hover:gap-2.5 transition-all">
+              View All Reality Deals <FiArrowRight className="w-3.5 h-3.5" />
+            </div>
+          </Link>
+        </div>
       </section>
 
       {/* ════════════════════════════════════ NEW ARRIVALS ═══ */}

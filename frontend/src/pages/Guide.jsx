@@ -1,5 +1,7 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { FiArrowRight } from 'react-icons/fi'
 
 const TABS = ['Color Guide', 'Body Types', 'Skin Tones', 'Season Guide', 'Occasion Guide', 'Beginner Tips', 'Trends 2024', 'Classic Styles']
 
@@ -109,7 +111,13 @@ export default function Guide() {
                         <div className="w-12 h-12 rounded-xl flex-shrink-0" style={{ background: c.accent }} />
                       </div>
                       <h3 className="font-semibold text-charcoal dark:text-cream mb-1">{c.name}</h3>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">{c.desc}</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">{c.desc}</p>
+                      <Link
+                        to={`/gallery/all/all?q=${encodeURIComponent(c.name.split('+')[0].trim())}`}
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-gold hover:text-gold-dark transition-colors"
+                      >
+                        Shop {c.name} <FiArrowRight className="w-3.5 h-3.5" />
+                      </Link>
                     </motion.div>
                   ))}
                 </div>
@@ -142,6 +150,14 @@ export default function Guide() {
                           {bt.donts.map((d, j) => <p key={j} className="text-xs text-red-800 dark:text-red-300">{d}</p>)}
                         </div>
                       </div>
+                      <div className="mt-4 pt-3 border-t border-border/60 dark:border-gray-700/60">
+                        <Link
+                          to={`/gallery/all/all?body_type=${encodeURIComponent(bt.type)}`}
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-gold hover:text-gold-dark transition-colors"
+                        >
+                          Shop {bt.type} Styles <FiArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
                     </motion.div>
                   ))}
                 </div>
@@ -166,6 +182,14 @@ export default function Guide() {
                       </div>
                       <p className="text-xs font-semibold text-red-700 dark:text-red-400 mb-1">Avoid</p>
                       {st.avoid.map(a => <p key={a} className="text-xs text-red-800 dark:text-red-300">{a}</p>)}
+                      <div className="mt-4 pt-3 border-t border-border/60 dark:border-gray-700/60">
+                        <Link
+                          to={`/gallery/all/all?skin_tone=${encodeURIComponent(st.tone)}`}
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-gold hover:text-gold-dark transition-colors"
+                        >
+                          Shop {st.tone} Skin Palette <FiArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
                     </motion.div>
                   ))}
                 </div>
@@ -187,6 +211,14 @@ export default function Guide() {
                         <div><span className="font-semibold text-gold">Colours: </span><span className="text-gray-700 dark:text-gray-300">{s.colours}</span></div>
                         <div><span className="font-semibold text-red-400">Avoid: </span><span className="text-gray-700 dark:text-gray-300">{s.avoid}</span></div>
                         <p className="mt-3 text-xs text-gray-600 dark:text-gray-400 bg-gold/10 rounded-lg p-3 italic">💡 {s.tip}</p>
+                      </div>
+                      <div className="mt-4 pt-3 border-t border-border/60 dark:border-gray-700/60">
+                        <Link
+                          to={`/gallery/all/all?season=${encodeURIComponent(s.season)}`}
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-gold hover:text-gold-dark transition-colors"
+                        >
+                          Shop {s.season} Collection <FiArrowRight className="w-3.5 h-3.5" />
+                        </Link>
                       </div>
                     </motion.div>
                   ))}
@@ -213,9 +245,17 @@ export default function Guide() {
                         <span className="text-3xl">{oc.icon}</span>
                         <h3 className="font-display font-bold text-xl text-charcoal dark:text-cream">{oc.occ}</h3>
                       </div>
-                      <ul className="space-y-1.5">
+                      <ul className="space-y-1.5 mb-4">
                         {oc.rules.map((r, j) => <li key={j} className="text-sm text-gray-700 dark:text-gray-300 flex items-start gap-2"><span className="text-gold">→</span> {r}</li>)}
                       </ul>
+                      <div className="pt-3 border-t border-border/60 dark:border-gray-700/60">
+                        <Link
+                          to={`/gallery/all/all?occasion=${encodeURIComponent(oc.occ.split('/')[0].trim())}`}
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-gold hover:text-gold-dark transition-colors"
+                        >
+                          Shop Outfits For {oc.occ} <FiArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
                     </motion.div>
                   ))}
                 </div>
@@ -252,7 +292,16 @@ export default function Guide() {
                           <h3 className="font-display text-xl font-bold text-charcoal dark:text-cream mb-2">{tr.trend}</h3>
                           <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{tr.desc}</p>
                           <div className="flex flex-wrap gap-2">
-                            {tr.items.map(item => <span key={item} className="px-3 py-1 rounded-full text-xs font-medium bg-gold/15 text-gold">{item}</span>)}
+                            {tr.items.map(item => (
+                              <Link
+                                key={item}
+                                to={`/gallery/all/all?q=${encodeURIComponent(item)}`}
+                                className="px-3 py-1 rounded-full text-xs font-semibold bg-gold/15 text-gold hover:bg-gold hover:text-white transition-all flex items-center gap-1"
+                              >
+                                <span>{item}</span>
+                                <span className="text-[10px]">🛒</span>
+                              </Link>
+                            ))}
                           </div>
                         </div>
                         <span className="text-5xl font-display font-bold text-gold/20">#{i + 1}</span>
@@ -282,7 +331,13 @@ export default function Guide() {
                     <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.08 }}
                       className="bg-white dark:bg-charcoal-light/50 rounded-2xl p-5 shadow-card hover:shadow-hover hover:-translate-y-1 transition-all">
                       <h3 className="font-display font-bold text-lg text-charcoal dark:text-cream mb-2">{s.style}</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{s.desc}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-3">{s.desc}</p>
+                      <Link
+                        to={`/gallery/all/all?q=${encodeURIComponent(s.style)}`}
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-gold hover:text-gold-dark transition-colors"
+                      >
+                        Shop {s.style} <FiArrowRight className="w-3.5 h-3.5" />
+                      </Link>
                     </motion.div>
                   ))}
                 </div>
