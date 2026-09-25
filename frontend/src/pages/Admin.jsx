@@ -166,13 +166,13 @@ export default function Admin() {
 
   return (
     <div className="min-h-screen bg-cream dark:bg-charcoal-dark py-8">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between mb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="font-display text-4xl font-bold text-charcoal dark:text-cream">Admin Panel</h1>
-            <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Manage clothing catalogue, analytics, and fraud monitoring</p>
+            <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-charcoal dark:text-cream">Admin Panel</h1>
+            <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm mt-1">Manage clothing catalogue, analytics, and fraud monitoring</p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 w-full sm:w-auto">
             <button
               onClick={() => setShowForm(true)}
               className="px-5 py-2.5 rounded-xl gradient-gold text-charcoal font-semibold text-sm hover:shadow-gold transition-all"

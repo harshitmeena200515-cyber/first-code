@@ -235,3 +235,32 @@ input[type='checkbox'].gold-check:checked {
 .glow-gold {
   box-shadow: 0 0 24px rgba(201,169,110,0.35);
 }
+
+/* ─── Mobile-first touch utilities ─────────────────────── */
+@media (max-width: 639px) {
+  /* Ensure minimum touch targets */
+  .touch-target { min-height: 44px; min-width: 44px; }
+  
+  /* Prevent text selection on interactive elements */
+  button, a, [role="button"] { -webkit-tap-highlight-color: transparent; }
+  
+  /* Smoother mobile scrolling */
+  .overflow-x-auto, .overflow-y-auto { -webkit-overflow-scrolling: touch; }
+}
+
+/* ─── Safe area insets for notched phones ──────────────── */
+@supports (padding: env(safe-area-inset-bottom)) {
+  footer { padding-bottom: calc(0.5rem + env(safe-area-inset-bottom)); }
+  .fixed.bottom-0 { bottom: env(safe-area-inset-bottom); }
+}
+
+/* ─── Better focus visibility ──────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ─── Responsive text utilities ────────────────────────── */
+.text-balance { text-wrap: balance; }
+.text-pretty { text-wrap: pretty; }

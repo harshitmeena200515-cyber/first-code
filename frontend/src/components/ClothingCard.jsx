@@ -44,7 +44,7 @@ export default function ClothingCard({ item, index = 0, variant = 'grid' }) {
           <div className="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/10 transition-colors duration-300" />
 
           {/* ── Quick action buttons ── */}
-          <div className="absolute top-3 right-3 flex flex-col gap-1.5 translate-x-10 group-hover:translate-x-0 transition-transform duration-300">
+          <div className="absolute top-2 right-2 sm:top-3 sm:right-3 flex flex-col gap-1.5 translate-x-0 sm:translate-x-10 group-hover:translate-x-0 transition-transform duration-300">
             <button
               onClick={toggleFav}
               className={`w-8 h-8 rounded-full flex items-center justify-center shadow-md backdrop-blur-sm transition-all
@@ -88,7 +88,7 @@ export default function ClothingCard({ item, index = 0, variant = 'grid' }) {
         </div>
 
         {/* ── Card body ── */}
-        <div className="p-4">
+        <div className="p-3 sm:p-4">
           {/* Category + Brand row */}
           <div className="flex items-center justify-between mb-1">
             <span className="text-[10px] font-medium text-gold uppercase tracking-wider">
@@ -98,7 +98,7 @@ export default function ClothingCard({ item, index = 0, variant = 'grid' }) {
           </div>
 
           {/* Name */}
-          <h3 className="font-display font-semibold text-sm text-charcoal dark:text-cream leading-tight line-clamp-2 mb-2">
+          <h3 className="font-display font-semibold text-xs sm:text-sm text-charcoal dark:text-cream leading-tight line-clamp-2 mb-2">
             {item.name}
           </h3>
 
@@ -108,7 +108,7 @@ export default function ClothingCard({ item, index = 0, variant = 'grid' }) {
           {/* Price + Color row */}
           <div className="flex items-center justify-between mt-3">
             <div className="flex items-baseline gap-1">
-              <span className="text-base font-bold text-charcoal dark:text-cream">
+              <span className="text-sm sm:text-base font-bold text-charcoal dark:text-cream">
                 ₹{item.price.toLocaleString('en-IN')}
               </span>
             </div>
@@ -130,7 +130,7 @@ export default function ClothingCard({ item, index = 0, variant = 'grid' }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={e => e.stopPropagation()}
-                className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl
+                className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl
                   bg-charcoal dark:bg-gold text-white dark:text-charcoal text-xs font-semibold
                   hover:opacity-90 transition-opacity"
               >

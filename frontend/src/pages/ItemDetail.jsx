@@ -174,17 +174,17 @@ export default function ItemDetail() {
                   {tLevel === 'high' ? '✅' : tLevel === 'medium' ? '🔍' : '⚠️'} Trust: {item.trust_score?.toFixed(0)}
                 </span>
               </div>
-              <h1 className="font-display text-3xl font-bold text-charcoal dark:text-cream leading-tight mb-3">
+              <h1 className="font-display text-xl sm:text-2xl md:text-3xl font-bold text-charcoal dark:text-cream leading-tight mb-3">
                 {item.name}
               </h1>
-              <div className="text-3xl font-bold text-charcoal dark:text-cream mb-4">
+              <div className="text-2xl sm:text-3xl font-bold text-charcoal dark:text-cream mb-4">
                 ₹{item.price?.toLocaleString('en-IN')}
               </div>
               <RatingTag item={item} />
             </div>
 
             {/* Actions */}
-            <div className="flex gap-3 mb-6">
+            <div className="flex flex-col sm:flex-row gap-3 mb-6">
               <button
                 onClick={toggleFav}
                 className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-semibold text-sm transition-all

@@ -3,7 +3,7 @@ import { FiShield, FiCheckCircle, FiSearch, FiAward, FiUsers, FiTrendingUp } fro
 
 export default function AboutUs() {
   return (
-    <div className="min-h-screen bg-cream dark:bg-charcoal-dark pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-cream dark:bg-charcoal-dark pt-16 sm:pt-24 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Hero Header */}
         <motion.div
@@ -14,7 +14,7 @@ export default function AboutUs() {
           <span className="text-xs uppercase tracking-widest text-gold font-semibold mb-2 block">
             About FashionDB
           </span>
-          <h1 className="font-display text-4xl sm:text-5xl font-bold text-charcoal dark:text-cream mb-4">
+          <h1 className="font-display text-2xl sm:text-4xl md:text-5xl font-bold text-charcoal dark:text-cream mb-4 text-balance">
             Curating India's Best Fashion with 100% Reality Checks
           </h1>
           <p className="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
@@ -86,7 +86,7 @@ export default function AboutUs() {
         <div className="p-6 rounded-2xl bg-gold/10 border border-gold/30 text-center">
           <h4 className="font-semibold text-charcoal dark:text-cream mb-2">Affiliate Transparency Notice</h4>
           <p className="text-xs text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            FashionDB participates in several affiliate marketing programs, including the Amazon Associates Program, Flipkart Affiliate Program, Myntra, and Meesho partner networks. When you click through our outbound links to make a purchase, we may earn an affiliate commission at absolutely no additional cost to you.
+            FashionDB participates in several affiliate marketing programs, including the Amazon Associates Program, Flipkart Affiliate Program, Myntra, Meesho, and Ajio partner networks. When you click through our outbound links to make a purchase, we may earn an affiliate commission at absolutely no additional cost to you.
           </p>
         </div>
       </div>

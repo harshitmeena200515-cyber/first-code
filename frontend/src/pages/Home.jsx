@@ -115,7 +115,7 @@ export default function Home() {
     <div className="min-h-screen bg-cream dark:bg-charcoal-dark">
 
       {/* ════════════════════════════════════════ HERO ═══ */}
-      <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden gradient-dark">
+      <section className="relative min-h-[85vh] md:min-h-[92vh] flex items-center justify-center overflow-hidden gradient-dark">
         <HeroParticles />
 
         {/* Decorative blobs */}
@@ -135,7 +135,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="font-display text-5xl md:text-7xl font-bold text-white leading-tight mb-6"
+            className="font-display text-3xl sm:text-5xl md:text-7xl font-bold text-white leading-tight mb-6"
           >
             Dress With{' '}
             <span className="gradient-text">Confidence.</span>
@@ -145,7 +145,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
+            className="text-gray-300 text-base sm:text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
           >
             AI-powered fashion guidance + real review verification. Filter fake reviews,
             see products as customers actually receive them.
@@ -155,23 +155,23 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
-            className="flex flex-wrap items-center justify-center gap-4"
+            className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto px-4 sm:px-0"
           >
             <Link
               to="/categories/boys"
-              className="px-8 py-3.5 rounded-2xl gradient-gold text-charcoal font-semibold text-sm hover:shadow-gold hover:scale-105 active:scale-95 transition-all"
+              className="px-8 py-3.5 rounded-2xl gradient-gold text-charcoal font-semibold text-sm hover:shadow-gold hover:scale-105 active:scale-95 transition-all w-full sm:w-auto text-center"
             >
               Explore Boys →
             </Link>
             <Link
               to="/categories/girls"
-              className="px-8 py-3.5 rounded-2xl border border-white/20 text-white font-semibold text-sm hover:border-gold/60 hover:bg-white/5 transition-all"
+              className="px-8 py-3.5 rounded-2xl border border-white/20 text-white font-semibold text-sm hover:border-gold/60 hover:bg-white/5 transition-all w-full sm:w-auto text-center"
             >
               Explore Girls →
             </Link>
             <Link
               to="/quiz"
-              className="px-8 py-3.5 rounded-2xl bg-white/10 backdrop-blur text-white font-semibold text-sm hover:bg-white/20 transition-all"
+              className="px-8 py-3.5 rounded-2xl bg-white/10 backdrop-blur text-white font-semibold text-sm hover:bg-white/20 transition-all w-full sm:w-auto text-center"
             >
               🎯 Take Fashion Quiz
             </Link>
@@ -183,7 +183,7 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.1 }}
-              className="flex flex-wrap items-center justify-center gap-6 mt-14"
+              className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-10 sm:mt-14"
             >
               {[
                 { label: 'Clothing Items', value: stats.total },
@@ -213,7 +213,7 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════ GENDER PICK ═══ */}
-      <section className="py-24 px-6 max-w-5xl mx-auto">
+      <section className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -222,7 +222,7 @@ export default function Home() {
           className="text-center mb-14"
         >
           <p className="text-gold text-xs font-semibold uppercase tracking-widest mb-3">Shop By</p>
-          <h2 className="font-display text-4xl font-bold text-charcoal dark:text-cream">Choose Your Style</h2>
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-charcoal dark:text-cream">Choose Your Style</h2>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -254,16 +254,16 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════ TRENDING ═══ */}
-      <section className="py-20 bg-white dark:bg-charcoal-light/30">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-between mb-10">
+      <section className="py-12 sm:py-16 md:py-20 bg-white dark:bg-charcoal-light/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 sm:mb-10">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
               <p className="text-gold text-xs font-semibold uppercase tracking-widest mb-1">Right Now</p>
-              <h2 className="font-display text-3xl font-bold text-charcoal dark:text-cream flex items-center gap-2">
+              <h2 className="font-display text-xl sm:text-2xl md:text-3xl font-bold text-charcoal dark:text-cream flex items-center gap-2">
                 <FiTrendingUp className="text-gold" /> Trending Styles
               </h2>
             </motion.div>
@@ -314,17 +314,17 @@ export default function Home() {
       </section>
 
       {/* ════════════════════════════════ FASHION GUIDE TEASER ═══ */}
-      <section className="py-20 px-6 max-w-7xl mx-auto">
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative rounded-3xl gradient-dark overflow-hidden p-10 md:p-16 text-center"
+          className="relative rounded-3xl gradient-dark overflow-hidden p-6 sm:p-10 md:p-16 text-center"
         >
           <HeroParticles />
           <div className="relative z-10">
             <FiZap className="w-10 h-10 text-gold mx-auto mb-4" />
-            <h2 className="font-display text-4xl font-bold text-white mb-4">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
               Not Sure What to Wear?
             </h2>
             <p className="text-gray-300 text-lg max-w-xl mx-auto mb-8">
@@ -345,7 +345,7 @@ export default function Home() {
 
       {/* ════════════════════════════════════ NEW ARRIVALS ═══ */}
       {arrivals.length > 0 && (
-        <section className="py-20 bg-cream dark:bg-charcoal-dark px-6">
+        <section className="py-12 sm:py-16 md:py-20 bg-cream dark:bg-charcoal-dark px-6">
           <div className="max-w-7xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -356,7 +356,7 @@ export default function Home() {
               <p className="text-gold text-xs font-semibold uppercase tracking-widest mb-1">Fresh In</p>
               <h2 className="font-display text-3xl font-bold text-charcoal dark:text-cream">New Arrivals</h2>
             </motion.div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
               {arrivals.map((item, i) => <ClothingCard key={item.id} item={item} index={i} />)}
             </div>
           </div>
@@ -364,7 +364,7 @@ export default function Home() {
       )}
 
       {/* ══════════════════════════════════ E vs R PROMO ═══ */}
-      <section className="py-20 px-6 max-w-7xl mx-auto">
+      <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -373,7 +373,7 @@ export default function Home() {
         >
           <div>
             <p className="text-gold text-xs font-semibold uppercase tracking-widest mb-3">Reality Check</p>
-            <h2 className="font-display text-4xl font-bold text-charcoal dark:text-cream mb-4 leading-tight">
+            <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-charcoal dark:text-cream mb-4 leading-tight">
               See What You Actually Get
             </h2>
             <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6">

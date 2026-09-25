@@ -81,27 +81,29 @@ export default function Navbar({ darkMode, toggleDark }) {
           {/* Right actions */}
           <div className="flex items-center gap-2">
             {/* Search */}
-            <AnimatePresence>
-              {showSearch && (
-                <motion.form
-                  initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: 200, opacity: 1 }}
-                  exit={{ width: 0, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  onSubmit={handleSearch}
-                  className="overflow-hidden"
-                >
-                  <input
-                    autoFocus
-                    value={search}
-                    onChange={e => setSearch(e.target.value)}
-                    placeholder="Search clothes…"
-                    className="w-full h-9 px-3 rounded-xl bg-cream dark:bg-charcoal-light border border-border dark:border-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
-                    onBlur={() => { if (!search) setShowSearch(false) }}
-                  />
-                </motion.form>
-              )}
-            </AnimatePresence>
+            <div className="flex-1 sm:flex-none flex justify-end">
+              <AnimatePresence>
+                {showSearch && (
+                  <motion.form
+                    initial={{ width: 0, opacity: 0 }}
+                    animate={{ width: 220, opacity: 1 }}
+                    exit={{ width: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    onSubmit={handleSearch}
+                    className="overflow-hidden"
+                  >
+                    <input
+                      autoFocus
+                      value={search}
+                      onChange={e => setSearch(e.target.value)}
+                      placeholder="Search clothes…"
+                      className="w-full h-9 px-3 rounded-xl bg-cream dark:bg-charcoal-light border border-border dark:border-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+                      onBlur={() => { if (!search) setShowSearch(false) }}
+                    />
+                  </motion.form>
+                )}
+              </AnimatePresence>
+            </div>
 
             <button
               onClick={() => setShowSearch(!showSearch)}
@@ -168,7 +170,7 @@ export default function Navbar({ darkMode, toggleDark }) {
                     key={link.to}
                     to={link.to}
                     onClick={() => setOpen(false)}
-                    className={`px-3 py-2.5 rounded-xl text-sm font-medium transition-colors
+                    className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors
                       ${pathname === link.to
                         ? 'bg-gold/15 text-gold'
                         : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-charcoal-light'
@@ -178,6 +180,19 @@ export default function Navbar({ darkMode, toggleDark }) {
                   </Link>
                 ))}
               </div>
+              
+              {/* Mobile search */}
+              <form onSubmit={handleSearch} className="mt-2 px-3">
+                <div className="relative">
+                  <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                    placeholder="Search clothes…"
+                    className="w-full h-11 pl-10 pr-4 rounded-xl bg-cream dark:bg-charcoal border border-border dark:border-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+                  />
+                </div>
+              </form>
             </motion.div>
           )}
         </AnimatePresence>
@@ -187,7 +202,7 @@ export default function Navbar({ darkMode, toggleDark }) {
       <div className="h-16" />
 
       {/* icon-btn global style — inject into the nearest style tag via className */}
-      <style>{`.icon-btn { @apply p-2 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-charcoal-light hover:text-charcoal dark:hover:text-cream transition-colors; }`}</style>
+      <style>{`.icon-btn { @apply p-2.5 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-charcoal-light hover:text-charcoal dark:hover:text-cream transition-colors; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; }`}</style>
     </>
   )
 }

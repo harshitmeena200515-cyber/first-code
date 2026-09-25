@@ -66,36 +66,53 @@ export default function App() {
           } />
         </Routes>
 
-        <footer className="bg-charcoal text-gray-400 text-center py-10 text-sm mt-16 border-t border-gray-800">
-          <div className="max-w-7xl mx-auto px-6">
-            <p className="mb-2 text-base font-semibold text-white">
-              <span className="font-display">FashionDB</span> — Curated Indian Fashion & E-commerce Reality Check
-            </p>
-            <p className="text-xs text-gray-400 mb-6 max-w-2xl mx-auto leading-relaxed">
-              Discover verified fashion across Amazon, Flipkart, Myntra, Meesho, and Ajio. Powered by real review photo analysis, trust scoring, and independent styling guides.
-            </p>
+        <footer className="bg-charcoal text-gray-400 mt-16 border-t border-gray-800">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+            {/* Top section */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+              {/* Brand */}
+              <div className="text-center sm:text-left">
+                <p className="text-lg font-semibold text-white mb-2">
+                  <span className="font-display">FashionDB</span>
+                </p>
+                <p className="text-xs text-gray-400 leading-relaxed">
+                  Curated Indian Fashion & E-commerce Reality Check. Discover verified fashion across Amazon, Flipkart, Myntra, Meesho, and Ajio.
+                </p>
+              </div>
 
-            <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-xs font-medium text-gray-300 mb-6">
-              <a href="/about" className="hover:text-gold transition-colors">About Us</a>
-              <span className="text-gray-600">·</span>
-              <a href="/contact" className="hover:text-gold transition-colors">Contact Us</a>
-              <span className="text-gray-600">·</span>
-              <a href="/privacy-policy" className="hover:text-gold transition-colors">Privacy Policy</a>
-              <span className="text-gray-600">·</span>
-              <a href="/terms-of-service" className="hover:text-gold transition-colors">Terms & Conditions</a>
-              <span className="text-gray-600">·</span>
-              <a href="/affiliate-disclosure" className="hover:text-gold transition-colors">Affiliate Disclosure</a>
-              <span className="text-gray-600">·</span>
-              <a href="/cookie-policy" className="hover:text-gold transition-colors">Cookie Policy</a>
+              {/* Quick Links */}
+              <div className="text-center sm:text-left">
+                <p className="text-sm font-semibold text-white mb-3">Quick Links</p>
+                <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
+                  <a href="/about" className="hover:text-gold transition-colors">About Us</a>
+                  <a href="/contact" className="hover:text-gold transition-colors">Contact Us</a>
+                  <a href="/privacy-policy" className="hover:text-gold transition-colors">Privacy Policy</a>
+                  <a href="/terms-of-service" className="hover:text-gold transition-colors">Terms & Conditions</a>
+                  <a href="/affiliate-disclosure" className="hover:text-gold transition-colors">Affiliate Disclosure</a>
+                  <a href="/cookie-policy" className="hover:text-gold transition-colors">Cookie Policy</a>
+                </div>
+              </div>
+
+              {/* Trust */}
+              <div className="text-center sm:text-left">
+                <p className="text-sm font-semibold text-white mb-3">Trusted Platforms</p>
+                <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
+                  {['Amazon', 'Flipkart', 'Myntra', 'Meesho', 'Ajio'].map(p => (
+                    <span key={p} className="text-[10px] px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-gray-300">{p}</span>
+                  ))}
+                </div>
+              </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-black/40 border border-gray-800/80 max-w-xl mx-auto mb-4 text-[11px] text-gray-400">
+            {/* Affiliate Disclaimer */}
+            <div className="p-3 rounded-xl bg-black/40 border border-gray-800/80 max-w-2xl mx-auto mb-6 text-[11px] text-gray-400 text-center">
               <strong className="text-gold">Affiliate Disclaimer:</strong> As an Amazon Associate, and an affiliate partner with Flipkart, Myntra, Meesho, and Ajio, we earn qualifying commissions from purchases made via our outbound links, at zero extra cost to you.
             </div>
 
-            <p className="text-xs text-gray-500">
+            {/* Copyright */}
+            <div className="text-center text-xs text-gray-500 pt-4 border-t border-gray-800">
               © {new Date().getFullYear()} FashionDB. Built with pride in India. All rights reserved.
-            </p>
+            </div>
           </div>
         </footer>
 
