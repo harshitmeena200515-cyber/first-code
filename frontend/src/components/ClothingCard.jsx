@@ -17,7 +17,8 @@ export default function ClothingCard({ item, index = 0, variant = 'grid' }) {
     setFav(!fav)
   }
 
-  const tLevel = item.trust_score >= 80 ? 'high' : item.trust_score >= 60 ? 'medium' : item.trust_score >= 40 ? 'low' : 'very_low'
+  const tScore = item.trust_score ?? 0
+  const tLevel = tScore >= 80 ? 'high' : tScore >= 60 ? 'medium' : tScore >= 40 ? 'low' : 'very_low'
 
   return (
     <motion.div
@@ -82,7 +83,7 @@ export default function ClothingCard({ item, index = 0, variant = 'grid' }) {
           {/* ── Trust badge overlay ── */}
           <div className="absolute bottom-3 left-3">
             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full trust-${tLevel}`}>
-              {tLevel === 'high' ? '✅' : tLevel === 'medium' ? '🔍' : tLevel === 'low' ? '⚠️' : '🚨'} {item.trust_score.toFixed(0)}
+              {tLevel === 'high' ? '✅' : tLevel === 'medium' ? '🔍' : tLevel === 'low' ? '⚠️' : '🚨'} {tScore.toFixed(0)}
             </span>
           </div>
         </div>
@@ -109,7 +110,7 @@ export default function ClothingCard({ item, index = 0, variant = 'grid' }) {
           <div className="flex items-center justify-between mt-3">
             <div className="flex items-baseline gap-1">
               <span className="text-sm sm:text-base font-bold text-charcoal dark:text-cream">
-                ₹{item.price.toLocaleString('en-IN')}
+                ₹{(item.price ?? 0).toLocaleString('en-IN')}
               </span>
             </div>
             <div className="flex items-center gap-1">

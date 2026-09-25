@@ -324,7 +324,7 @@ export default function Deals() {
                         <div className="absolute bottom-3 left-3">
                           <span className={`text-[10px] font-bold px-2 py-1 rounded-full shadow-md backdrop-blur-md flex items-center gap-1 bg-black/60 text-white border border-white/10`}>
                             <FiShield className={tLevel === 'high' ? 'text-emerald-400' : tLevel === 'medium' ? 'text-amber-400' : 'text-red-400'} />
-                            <span>Trust: {item.trust_score.toFixed(0)}</span>
+                            <span>Trust: {(item.trust_score ?? 0).toFixed(0)}</span>
                           </span>
                         </div>
 
@@ -349,10 +349,10 @@ export default function Deals() {
                       <div className="flex items-baseline justify-between mt-3">
                         <div className="flex items-baseline gap-1.5">
                           <span className="text-lg font-bold text-charcoal dark:text-cream">
-                            ₹{item.price.toLocaleString('en-IN')}
+                            ₹{(item.price ?? 0).toLocaleString('en-IN')}
                           </span>
                           <span className="text-xs text-gray-400 line-through">
-                            ₹{item.originalPrice.toLocaleString('en-IN')}
+                            ₹{(item.originalPrice ?? 0).toLocaleString('en-IN')}
                           </span>
                         </div>
                       </div>

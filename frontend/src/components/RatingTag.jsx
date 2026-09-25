@@ -27,7 +27,7 @@ export function StarRating({ rating = 0, size = 'sm', showNumber = true }) {
 
 /** Full rating tag: stars + review count + trust badge */
 export default function RatingTag({ item, compact = false }) {
-  const { rating = 0, review_count = 0, trust_score = 0, trust_level } = item
+  const { rating = 0, review_count = 0, trust_score = 0, trust_level } = item || {}
 
   const tLevel = trust_level || (
     trust_score >= 80 ? 'high' : trust_score >= 60 ? 'medium' : trust_score >= 40 ? 'low' : 'very_low'
@@ -45,7 +45,7 @@ export default function RatingTag({ item, compact = false }) {
       <div className="flex items-center gap-1.5 flex-wrap">
         <StarRating rating={rating} size="sm" showNumber />
         <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full trust-${tLevel}`}>
-          {trust_score.toFixed(0)}
+          {(trust_score ?? 0).toFixed(0)}
         </span>
       </div>
     )
@@ -61,7 +61,7 @@ export default function RatingTag({ item, compact = false }) {
       <div className="flex items-center gap-2 flex-wrap">
         <StarRating rating={rating} size="md" showNumber />
         <span className="text-xs text-gray-500 dark:text-gray-400">
-          ({review_count.toLocaleString()} reviews)
+          ({(review_count ?? 0).toLocaleString()} reviews)
         </span>
       </div>
 

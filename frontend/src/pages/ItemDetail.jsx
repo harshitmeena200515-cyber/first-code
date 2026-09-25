@@ -361,7 +361,7 @@ export default function ItemDetail() {
                     <div className="bg-white dark:bg-charcoal-light/30 rounded-xl p-4 space-y-1 text-xs">
                       <p className="font-semibold text-sm mb-2">Score Breakdown</p>
                       <div className="flex justify-between"><span className="text-gray-500">Base Score</span><span>{fraud.breakdown?.base_score}</span></div>
-                      <div className="flex justify-between"><span className="text-gray-500">Image Ratio</span><span>{(fraud.breakdown?.image_ratio * 100).toFixed(0)}%</span></div>
+                      <div className="flex justify-between"><span className="text-gray-500">Image Ratio</span><span>{((fraud.breakdown?.image_ratio ?? 0) * 100).toFixed(0)}%</span></div>
                       <div className="flex justify-between text-red-500"><span>Spike Penalty</span><span>-{fraud.breakdown?.spike_penalty}</span></div>
                       <div className="flex justify-between text-red-500"><span>Image Penalty</span><span>-{fraud.breakdown?.image_penalty}</span></div>
                     </div>
