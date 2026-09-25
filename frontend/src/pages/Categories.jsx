@@ -22,6 +22,7 @@ export default function Categories() {
   const [loadingItems, setLoadingItems] = useState(true)
 
   useEffect(() => {
+    setSelCat(null)
     fetchCategories({ gender }).then(r => setCats(r.data)).catch(() => {})
   }, [gender])
 

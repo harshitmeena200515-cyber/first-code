@@ -105,6 +105,13 @@ export default function Gallery() {
     fetchFilters({ gender: g }).then(r => setFilters(r.data)).catch(() => {})
   }, [gender])
 
+  // Sync URL search params to local state on route/query change
+  useEffect(() => {
+    setQ(sp.get('q') || '')
+    setMaxPrice(sp.get('max_price') || '')
+    setMinPrice(sp.get('min_price') || '')
+  }, [sp])
+
   // Fetch items
   const load = useCallback(async (p = 1) => {
     setLoading(true)
