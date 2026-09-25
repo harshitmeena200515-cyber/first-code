@@ -72,7 +72,7 @@ function FilterSection({ title, options, selected, onToggle }) {
 }
 
 export default function Gallery() {
-  const { gender, category, subcategory } = useParams()
+  const { gender = 'all', category = 'all', subcategory = 'all' } = useParams()
   const [sp, setSp] = useSearchParams()
 
   const [items,    setItems]   = useState([])
@@ -187,9 +187,21 @@ export default function Gallery() {
             <div className="sticky top-24 bg-white dark:bg-charcoal-light/50 rounded-2xl p-5 shadow-card">
               <div className="flex items-center justify-between mb-5">
                 <h3 className="font-semibold text-charcoal dark:text-cream">Filters</h3>
-                {activeFilters.length > 0 && (
-                  <button onClick={clearAll} className="text-xs text-gold hover:underline">Clear all</button>
-                )}
+                <div className="flex items-center gap-2">
+                  {activeFilters.length > 0 && (
+                    <button onClick={clearAll} className="text-xs text-gold hover:underline">Clear all</button>
+                  )}
+                  {sideOpen && (
+                    <button
+                      onClick={() => setSide(false)}
+                      className="lg:hidden p-1.5 rounded-lg text-gray-500 hover:text-red-500 hover:bg-gray-100 dark:hover:bg-charcoal transition-colors"
+                      aria-label="Close filters"
+                      title="Close filters"
+                    >
+                      <FiX className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
               </div>
 
               {/* Price range */}
@@ -246,6 +258,16 @@ export default function Gallery() {
               )}
               {filters.occasions?.length > 0 && (
                 <FilterSection title="Occasion" options={filters.occasions.slice(0, 8)} selected={selOcc} onToggle={v => toggle(setOcc, v)} />
+              )}
+
+              {/* Mobile Close / Done button */}
+              {sideOpen && (
+                <button
+                  onClick={() => setSide(false)}
+                  className="lg:hidden w-full mt-4 py-2.5 rounded-xl gradient-gold text-charcoal font-semibold text-xs tracking-wider uppercase transition-all shadow-md active:scale-95"
+                >
+                  Done (View {total} Items)
+                </button>
               )}
             </div>
           </aside>

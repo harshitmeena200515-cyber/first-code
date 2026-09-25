@@ -78,6 +78,14 @@ export default function ItemDetail() {
       .finally(() => setLoading(false))
   }, [id])
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setZoom(false)
+    }
+    if (zoom) window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [zoom])
+
   const toggleFav = () => {
     if (fav) removeFavorite(item.id); else addFavorite(item.id)
     setFav(!fav)

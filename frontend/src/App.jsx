@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 
 import Navbar      from './components/Navbar.jsx'
+import AppHeaderBar from './components/AppHeaderBar.jsx'
+import BottomNav    from './components/BottomNav.jsx'
+import ScrollToTop  from './components/ScrollToTop.jsx'
 import Home        from './pages/Home.jsx'
 import Categories  from './pages/Categories.jsx'
 import Gallery     from './pages/Gallery.jsx'
@@ -35,36 +38,45 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <div className={`min-h-screen transition-colors duration-300 ${dark ? 'dark' : ''}`}>
+      <ScrollToTop />
+      <div className={`min-h-screen flex flex-col transition-colors duration-300 ${dark ? 'dark' : ''}`}>
         <Navbar darkMode={dark} toggleDark={() => setDark(d => !d)} />
+        <AppHeaderBar />
 
-        <Routes>
-          <Route path="/"                                  element={<Home />} />
-          <Route path="/categories/:gender"                element={<Categories />} />
-          <Route path="/gallery/:gender/:category"         element={<Gallery />} />
-          <Route path="/gallery/:gender/:category/:subcategory" element={<Gallery />} />
-          <Route path="/item/:id"                          element={<ItemDetail />} />
-          <Route path="/guide"                             element={<Guide />} />
-          <Route path="/quiz"                              element={<Quiz />} />
-          <Route path="/favorites"                         element={<Favorites />} />
-          <Route path="/outfit-builder"                    element={<OutfitBuilder />} />
-          <Route path="/admin"                             element={<Admin />} />
-          <Route path="/deals"                             element={<Deals />} />
-          <Route path="/analyze"                           element={<ListingAnalyzer />} />
-          <Route path="/about"                             element={<AboutUs />} />
-          <Route path="/contact"                           element={<ContactUs />} />
-          <Route path="/privacy-policy"                    element={<PrivacyPolicy />} />
-          <Route path="/terms-of-service"                  element={<TermsOfService />} />
-          <Route path="/affiliate-disclosure"              element={<AffiliateDisclosure />} />
-          <Route path="/cookie-policy"                     element={<CookiePolicy />} />
-          <Route path="*" element={
-            <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-              <span className="text-6xl">404</span>
-              <p className="text-gray-500 dark:text-gray-400">Page not found</p>
-              <a href="/" className="text-gold hover:underline">← Go home</a>
-            </div>
-          } />
-        </Routes>
+        <main className="flex-1 pb-16 md:pb-0">
+          <Routes>
+            <Route path="/"                                  element={<Home />} />
+            <Route path="/categories"                        element={<Categories />} />
+            <Route path="/categories/:gender"                element={<Categories />} />
+            <Route path="/gallery"                           element={<Gallery />} />
+            <Route path="/gallery/:gender"                   element={<Gallery />} />
+            <Route path="/gallery/:gender/:category"         element={<Gallery />} />
+            <Route path="/gallery/:gender/:category/:subcategory" element={<Gallery />} />
+            <Route path="/item/:id"                          element={<ItemDetail />} />
+            <Route path="/guide"                             element={<Guide />} />
+            <Route path="/quiz"                              element={<Quiz />} />
+            <Route path="/favorites"                         element={<Favorites />} />
+            <Route path="/outfit-builder"                    element={<OutfitBuilder />} />
+            <Route path="/admin"                             element={<Admin />} />
+            <Route path="/deals"                             element={<Deals />} />
+            <Route path="/analyze"                           element={<ListingAnalyzer />} />
+            <Route path="/about"                             element={<AboutUs />} />
+            <Route path="/contact"                           element={<ContactUs />} />
+            <Route path="/privacy-policy"                    element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service"                  element={<TermsOfService />} />
+            <Route path="/affiliate-disclosure"              element={<AffiliateDisclosure />} />
+            <Route path="/cookie-policy"                     element={<CookiePolicy />} />
+            <Route path="*" element={
+              <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+                <span className="text-6xl">404</span>
+                <p className="text-gray-500 dark:text-gray-400">Page not found</p>
+                <a href="/" className="text-gold hover:underline">← Go home</a>
+              </div>
+            } />
+          </Routes>
+        </main>
+
+        <BottomNav />
 
         <footer className="bg-charcoal text-gray-400 mt-16 border-t border-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">

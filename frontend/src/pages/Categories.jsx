@@ -13,7 +13,7 @@ const CATEGORY_META = {
 }
 
 export default function Categories() {
-  const { gender } = useParams()
+  const { gender = 'boys' } = useParams()
   const [cats,    setCats]    = useState([])
   const [selCat,  setSelCat]  = useState(null)
   const [subcats, setSubcats] = useState([])
