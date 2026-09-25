@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FiSearch, FiSun, FiMoon, FiHeart, FiMenu, FiX, FiShoppingBag, FiStar } from 'react-icons/fi'
+import { FiSearch, FiSun, FiMoon, FiHeart, FiMenu, FiX, FiShoppingBag, FiStar, FiArrowLeft } from 'react-icons/fi'
 import { getFavorites } from '../api'
 
 const NAV_LINKS = [
@@ -51,15 +51,31 @@ export default function Navbar({ darkMode, toggleDark }) {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
 
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 shrink-0">
-            <div className="w-8 h-8 rounded-lg gradient-gold flex items-center justify-center">
-              <FiShoppingBag className="w-4 h-4 text-white" />
-            </div>
-            <span className="font-display font-bold text-xl text-charcoal dark:text-cream">
-              Fashion<span className="gradient-text">DB</span>
-            </span>
-          </Link>
+          {/* Logo & Mobile Back */}
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+            {pathname !== '/' && (
+              <button
+                onClick={() => {
+                  if (window.history.length > 1) navigate(-1)
+                  else navigate('/')
+                }}
+                className="lg:hidden p-2 rounded-xl text-gold hover:bg-gold/10 transition-colors flex items-center justify-center -ml-1"
+                aria-label="Back"
+                title="Go back"
+              >
+                <FiArrowLeft className="w-5 h-5" />
+              </button>
+            )}
+
+            <Link to="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg gradient-gold flex items-center justify-center">
+                <FiShoppingBag className="w-4 h-4 text-white" />
+              </div>
+              <span className="font-display font-bold text-xl text-charcoal dark:text-cream">
+                Fashion<span className="gradient-text">DB</span>
+              </span>
+            </Link>
+          </div>
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-6">

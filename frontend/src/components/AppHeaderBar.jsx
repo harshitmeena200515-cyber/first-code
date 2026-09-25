@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiArrowLeft, FiHome, FiX, FiChevronRight } from 'react-icons/fi'
@@ -9,8 +10,12 @@ export default function AppHeaderBar() {
   if (pathname === '/') return null
 
   const handleBack = () => {
-    if (window.history.state && window.history.state.idx > 0) {
+    if (window.history.length > 1) {
       navigate(-1)
+    } else if (pathname.startsWith('/item/')) {
+      navigate('/gallery/all/all')
+    } else if (pathname.startsWith('/gallery/')) {
+      navigate('/categories/boys')
     } else {
       navigate('/')
     }
@@ -21,12 +26,28 @@ export default function AppHeaderBar() {
   }
 
   const handleClose = () => {
-    if (window.history.state && window.history.state.idx > 0) {
+    if (window.history.length > 1) {
       navigate(-1)
     } else {
       navigate('/')
     }
   }
+
+  // Keyboard Backspace key support
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Backspace') {
+        const tag = (e.target.tagName || '').toLowerCase()
+        if (tag === 'input' || tag === 'textarea' || e.target.isContentEditable) {
+          return
+        }
+        e.preventDefault()
+        handleBack()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [pathname])
 
   // Generate dynamic breadcrumbs & title based on route
   const getRouteInfo = () => {

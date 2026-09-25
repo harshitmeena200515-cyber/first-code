@@ -100,11 +100,54 @@ export default function Home() {
   const [arrivals, setArrivals]   = useState([])
   const [stats,    setStats]      = useState(null)
   const [tab,      setTab]        = useState('boys')
+  const [loadingTrending, setLoadingTrending] = useState(true)
+
+  const safeExtract = (res) => {
+    if (!res || !res.data) return []
+    if (Array.isArray(res.data)) return res.data
+    if (Array.isArray(res.data.items)) return res.data.items
+    return []
+  }
+
+  const loadTrendingData = (g = tab) => {
+    setLoadingTrending(true)
+    fetchTrending({ gender: g, limit: 8 })
+      .then(r => {
+        const list = safeExtract(r)
+        if (list.length > 0) {
+          setTrending(list)
+        }
+      })
+      .catch(() => {
+        // Retry once after 2.5 seconds if server is waking up
+        setTimeout(() => {
+          fetchTrending({ gender: g, limit: 8 })
+            .then(r => {
+              const list = safeExtract(r)
+              if (list.length > 0) setTrending(list)
+            })
+            .catch(() => {})
+            .finally(() => setLoadingTrending(false))
+        }, 2500)
+      })
+      .finally(() => setLoadingTrending(false))
+  }
 
   useEffect(() => {
-    fetchTrending({ limit: 8 }).then(r => { if (Array.isArray(r.data)) setTrending(r.data) }).catch(() => {})
-    fetchNewArrivals({ limit: 6 }).then(r => { if (Array.isArray(r.data)) setArrivals(r.data) }).catch(() => {})
-    fetchStats().then(r => { if (r.data && typeof r.data === 'object' && !Array.isArray(r.data)) setStats(r.data) }).catch(() => {})
+    loadTrendingData('boys')
+
+    fetchNewArrivals({ limit: 6 })
+      .then(r => {
+        const list = safeExtract(r)
+        if (list.length > 0) setArrivals(list)
+      })
+      .catch(() => {})
+
+    fetchStats()
+      .then(r => {
+        if (r.data && typeof r.data === 'object' && !Array.isArray(r.data)) setStats(r.data)
+      })
+      .catch(() => {})
   }, [])
 
   const { scrollY } = useScroll()
@@ -275,7 +318,7 @@ export default function Home() {
                   key={g}
                   onClick={() => {
                     setTab(g)
-                    fetchTrending({ gender: g, limit: 8 }).then(r => { if (Array.isArray(r.data)) setTrending(r.data) }).catch(() => {})
+                    loadTrendingData(g)
                   }}
                   className={`px-5 py-2 text-sm font-medium transition-colors capitalize
                     ${tab === g ? 'bg-gold text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-charcoal-light'}`}
