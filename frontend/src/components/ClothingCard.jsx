@@ -8,6 +8,7 @@ import RatingTag from './RatingTag'
 const FALLBACK = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f3f4f6' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%236b7280' font-size='14' font-family='sans-serif'%3ENo Image%3C/text%3E%3C/svg%3E"
 
 export default function ClothingCard({ item, index = 0, variant = 'grid' }) {
+  if (!item || typeof item !== 'object') return null
   const [fav, setFav]   = useState(() => isFavorite(item.id))
   const [imgErr, setErr]= useState(false)
 

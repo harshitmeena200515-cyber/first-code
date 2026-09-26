@@ -27,6 +27,7 @@ export function StarRating({ rating = 0, size = 'sm', showNumber = true }) {
 
 /** Full rating tag: stars + review count + trust badge */
 export default function RatingTag({ item, compact = false }) {
+  if (!item || typeof item !== 'object') return null
   const { rating = 0, review_count = 0, trust_score = 0, trust_level } = item || {}
 
   const tLevel = trust_level || (
