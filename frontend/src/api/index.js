@@ -20,7 +20,16 @@ api.interceptors.response.use(
     }
     return response
   },
-  (error) => Promise.reject(error)
+  async (error) => {
+    const config = error.config
+    // If request failed due to network error, timeout, or 502/503/504 while Render is waking up, retry up to 2 times
+    if (config && (!config._retryCount || config._retryCount < 2)) {
+      config._retryCount = (config._retryCount || 0) + 1
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+      return api(config)
+    }
+    return Promise.reject(error)
+  }
 )
 
 // ─── Products ──────────────────────────────────────────────────────

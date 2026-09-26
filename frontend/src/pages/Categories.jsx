@@ -35,7 +35,7 @@ export default function Categories() {
       .catch(() => setSubcats([]))
   }, [selCat, gender])
 
-  useEffect(() => {
+  const loadItems = () => {
     setLoadingItems(true)
     fetchClothes({
       gender: gender === 'all' ? undefined : gender,
@@ -50,6 +50,10 @@ export default function Categories() {
       })
       .catch(() => setItems([]))
       .finally(() => setLoadingItems(false))
+  }
+
+  useEffect(() => {
+    loadItems()
   }, [gender, selCat])
 
   const genderLabel = gender?.charAt(0).toUpperCase() + gender?.slice(1)
@@ -211,13 +215,21 @@ export default function Categories() {
           ) : (
             <div className="text-center py-16 bg-white dark:bg-charcoal-light/30 rounded-2xl border border-border dark:border-gray-800">
               <p className="text-4xl mb-3">👗</p>
-              <p className="text-sm font-semibold text-charcoal dark:text-cream mb-2">No products found in this category yet</p>
-              <Link
-                to={`/gallery/${gender}/all`}
-                className="text-xs text-gold hover:underline font-semibold"
-              >
-                View all items in {genderLabel.endsWith('s') ? `${genderLabel}'` : `${genderLabel}'s`} collection →
-              </Link>
+              <p className="text-sm font-semibold text-charcoal dark:text-cream mb-2">No products loaded yet</p>
+              <div className="flex flex-wrap items-center justify-center gap-3 mt-4">
+                <button
+                  onClick={loadItems}
+                  className="px-4 py-2.5 rounded-xl bg-gold text-white text-xs font-semibold hover:opacity-90 transition-opacity flex items-center gap-1.5 shadow"
+                >
+                  🔄 Tap to Load Products
+                </button>
+                <Link
+                  to={`/gallery/${gender}/all`}
+                  className="px-4 py-2.5 rounded-xl border border-border dark:border-gray-700 text-xs text-gold hover:underline font-semibold"
+                >
+                  View full gallery →
+                </Link>
+              </div>
             </div>
           )}
         </div>
