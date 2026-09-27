@@ -7,8 +7,6 @@ export default function AppHeaderBar() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
-  if (pathname === '/') return null
-
   const handleBack = () => {
     if (window.history.length > 1) {
       navigate(-1)
@@ -171,6 +169,8 @@ export default function AppHeaderBar() {
   }
 
   const { title, crumbs } = getRouteInfo()
+
+  if (pathname === '/') return null
 
   return (
     <motion.aside
