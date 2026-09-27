@@ -49,7 +49,7 @@ export default function Navbar({ darkMode, toggleDark }) {
             : 'bg-transparent'
           }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-1 sm:gap-4">
 
           {/* Logo & Mobile Back */}
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
@@ -95,7 +95,7 @@ export default function Navbar({ darkMode, toggleDark }) {
           </nav>
 
           {/* Right actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-0.5 sm:gap-2 shrink-0">
             {/* Search */}
             <div className="flex-1 sm:flex-none flex justify-end">
               <AnimatePresence>
@@ -228,8 +228,8 @@ export default function Navbar({ darkMode, toggleDark }) {
       {/* Spacer */}
       <div className="h-16" />
 
-      {/* icon-btn global style — inject into the nearest style tag via className */}
-      <style>{`.icon-btn { @apply p-2.5 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-charcoal-light hover:text-charcoal dark:hover:text-cream transition-colors; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; }`}</style>
+      {/* icon-btn global style */}
+      <style>{`.icon-btn { @apply p-2 sm:p-2.5 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-charcoal-light hover:text-charcoal dark:hover:text-cream transition-colors; min-width: 36px; min-height: 36px; display: flex; align-items: center; justify-content: center; } @media (min-width: 640px) { .icon-btn { min-width: 44px; min-height: 44px; } }`}</style>
     </>
   )
 }
