@@ -35,7 +35,7 @@ export default function Categories() {
       .catch(() => setSubcats([]))
   }, [selCat, gender])
 
-  const loadItems = () => {
+  useEffect(() => {
     setLoadingItems(true)
     fetchClothes({
       gender: gender === 'all' ? undefined : gender,
@@ -50,10 +50,6 @@ export default function Categories() {
       })
       .catch(() => setItems([]))
       .finally(() => setLoadingItems(false))
-  }
-
-  useEffect(() => {
-    loadItems()
   }, [gender, selCat])
 
   const genderLabel = gender?.charAt(0).toUpperCase() + gender?.slice(1)
@@ -68,7 +64,7 @@ export default function Categories() {
       <div className="relative h-48 overflow-hidden">
         <img src={heroImg} alt={gender} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-charcoal/80 to-charcoal/40" />
-        <div className="absolute inset-0 flex items-center px-8">
+        <div className="absolute inset-0 flex items-center px-4 sm:px-6 lg:px-8">
           <div>
             <nav className="flex items-center gap-2 text-xs text-gray-300 mb-2">
               <Link to="/" className="hover:text-gold">Home</Link>
@@ -83,7 +79,7 @@ export default function Categories() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Category cards */}
         <h2 className="font-display text-2xl font-bold text-charcoal dark:text-cream mb-8">
           Shop by Category
@@ -218,10 +214,10 @@ export default function Categories() {
               <p className="text-sm font-semibold text-charcoal dark:text-cream mb-2">No products loaded yet</p>
               <div className="flex flex-wrap items-center justify-center gap-3 mt-4">
                 <button
-                  onClick={loadItems}
+                  onClick={() => window.location.reload()}
                   className="px-4 py-2.5 rounded-xl bg-gold text-white text-xs font-semibold hover:opacity-90 transition-opacity flex items-center gap-1.5 shadow"
                 >
-                  🔄 Tap to Load Products
+                  🔄 Reload Page
                 </button>
                 <Link
                   to={`/gallery/${gender}/all`}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
+import ErrorBoundary from './components/ErrorBoundary.jsx'
 
 import Navbar      from './components/Navbar.jsx'
 import AppHeaderBar from './components/AppHeaderBar.jsx'
@@ -44,6 +45,7 @@ export default function App() {
         <AppHeaderBar />
 
         <main className="flex-1 pb-16 md:pb-0">
+          <ErrorBoundary>
           <Routes>
             <Route path="/"                                  element={<Home />} />
             <Route path="/categories"                        element={<Categories />} />
@@ -74,6 +76,7 @@ export default function App() {
               </div>
             } />
           </Routes>
+          </ErrorBoundary>
         </main>
 
         <BottomNav />
