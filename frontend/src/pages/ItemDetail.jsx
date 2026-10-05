@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FiHeart, FiExternalLink, FiShare2, FiCheckCircle, FiXCircle, FiChevronRight } from 'react-icons/fi'
-import { fetchCloth, fetchClothes, addRecentlyViewed, addFavorite, removeFavorite, isFavorite, fraudAnalyze, fetchReviews } from '../api'
+import { fetchCloth, fetchClothes, addRecentlyViewed, addFavorite, removeFavorite, isFavorite, fraudAnalyze, fetchReviews, getImageUrl } from '../api'
 import RatingTag from '../components/RatingTag'
 import ExpectationVsReality from '../components/ExpectationVsReality'
 import ClothingCard from '../components/ClothingCard'
@@ -135,37 +135,39 @@ export default function ItemDetail() {
         <div className="grid md:grid-cols-2 gap-10 mb-16">
           {/* ── LEFT: Images ── */}
           <div className="space-y-4">
-            {/* Main image with zoom */}
-            <div
-              className="relative aspect-[3/4] rounded-3xl overflow-hidden cursor-zoom-in bg-gray-100 dark:bg-charcoal-light group"
-              onClick={() => setZoom(true)}
-            >
-              <img
-                src={imgErr ? FALLBACK : item.image_path || FALLBACK}
-                alt={item.name}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                onError={() => setImgErr(true)}
-              />
-              <div className="absolute bottom-3 right-3 bg-charcoal/70 backdrop-blur text-white text-[10px] px-2 py-1 rounded-full">
-                🔍 Click to zoom
-              </div>
-              {item.trend_score >= 88 && (
-                <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 rounded-full bg-gold text-white text-xs font-bold shadow-gold animate-pulse-gold">
-                    🔥 Trending
-                  </span>
+            {/* Main image with zoom and 3D stage */}
+            <div className="card-3d-wrap">
+              <div
+                className="relative aspect-[3/4] rounded-3xl overflow-hidden cursor-zoom-in bg-gray-100 dark:bg-charcoal-light group shadow-2xl border border-white/20 dark:border-white/10 glow-gold-3d transition-transform duration-500 hover:scale-[1.01]"
+                onClick={() => setZoom(true)}
+              >
+                <img
+                  src={imgErr ? FALLBACK : (getImageUrl(item.image_path) || FALLBACK)}
+                  alt={item.name}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  onError={() => setImgErr(true)}
+                />
+                <div className="absolute bottom-3 right-3 bg-charcoal/70 backdrop-blur-md text-white text-[10px] px-2.5 py-1 rounded-full shadow-md">
+                  🔍 Click to zoom
                 </div>
-              )}
+                {item.trend_score >= 88 && (
+                  <div className="absolute top-4 left-4">
+                    <span className="px-3 py-1 rounded-full bg-gold text-white text-xs font-bold shadow-gold animate-pulse-gold">
+                      🔥 Trending
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* E vs R slider */}
             {item.customer_photo && (
-              <div>
+              <div className="glass-3d p-4 rounded-3xl border border-white/20 dark:border-white/10 shadow-xl">
                 <h4 className="text-sm font-semibold text-charcoal dark:text-cream mb-2 flex items-center gap-2">
                   🆚 Expectation vs Reality
                   <span className="text-xs text-gray-400 font-normal">Drag the slider →</span>
                 </h4>
-                <ExpectationVsReality studioSrc={item.image_path} customerSrc={item.customer_photo} />
+                <ExpectationVsReality studioSrc={getImageUrl(item.image_path)} customerSrc={getImageUrl(item.customer_photo)} />
               </div>
             )}
           </div>
@@ -429,7 +431,7 @@ export default function ItemDetail() {
           <motion.img
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            src={item.image_path || FALLBACK}
+            src={getImageUrl(item.image_path) || FALLBACK}
             alt={item.name}
             className="max-w-full max-h-full object-contain rounded-2xl"
           />

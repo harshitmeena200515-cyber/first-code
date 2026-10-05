@@ -32,12 +32,27 @@ api.interceptors.response.use(
   }
 )
 
+// ─── Image URL Helper ──────────────────────────────────────────────
+export const getImageUrl = (path) => {
+  if (!path) return ''
+  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:')) {
+    return path
+  }
+  const rawBase = import.meta.env.VITE_API_URL || 'https://fashiondb-api.onrender.com/api'
+  const host = rawBase.replace(/\/api\/?$/, '')
+  const cleanPath = path.startsWith('/') ? path : `/${path}`
+  return `${host}${cleanPath}`
+}
+
 // ─── Products ──────────────────────────────────────────────────────
-export const fetchClothes    = (params = {}) => api.get('/clothes', { params })
-export const fetchCloth      = (id)          => api.get(`/clothes/${id}`)
-export const createCloth     = (data)        => api.post('/clothes', data)
-export const updateCloth     = (id, data)    => api.put(`/clothes/${id}`, data)
-export const deleteCloth     = (id)          => api.delete(`/clothes/${id}`)
+export const fetchClothes        = (params = {}) => api.get('/clothes', { params })
+export const fetchCloth          = (id)          => api.get(`/clothes/${id}`)
+export const createCloth         = (data)        => api.post('/clothes', data)
+export const updateCloth         = (id, data)    => api.put(`/clothes/${id}`, data)
+export const deleteCloth         = (id)          => api.delete(`/clothes/${id}`)
+export const toggleProductStock  = (id)          => api.patch(`/clothes/${id}/toggle-stock`)
+export const adminLogin          = (password)    => api.post('/admin/login', { password })
+export const importProductUrl    = (url, gender) => api.post('/admin/import-url', { url, gender })
 
 // ─── Discovery ────────────────────────────────────────────────────
 export const fetchTrending   = (params = {}) => api.get('/trending', { params })

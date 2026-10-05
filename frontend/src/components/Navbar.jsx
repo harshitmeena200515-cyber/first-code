@@ -40,16 +40,17 @@ export default function Navbar({ darkMode, toggleDark }) {
   return (
     <>
       <motion.header
-        initial={{ y: -80 }}
-        animate={{ y: 0 }}
+        initial={{ y: -80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300
-          ${scrolled
-            ? 'glass shadow-lg border-b border-white/20 dark:border-white/5'
-            : 'bg-transparent'
-          }`}
+        className="fixed top-0 left-0 right-0 z-50 pt-2.5 sm:pt-3 px-3 sm:px-6 pointer-events-none transition-all duration-300"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+        <div className={`max-w-7xl mx-auto pointer-events-auto rounded-2xl glass-3d transition-all duration-300 px-3.5 sm:px-6 h-16 flex items-center justify-between gap-4
+          ${scrolled
+            ? 'shadow-2xl border border-white/50 dark:border-white/15 bg-white/85 dark:bg-charcoal-dark/85 backdrop-blur-2xl'
+            : 'shadow-lg border border-white/30 dark:border-white/10 bg-white/70 dark:bg-charcoal-dark/70 backdrop-blur-xl'
+          }`}
+        >
 
           {/* Logo & Mobile Back */}
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
@@ -178,7 +179,7 @@ export default function Navbar({ darkMode, toggleDark }) {
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="lg:hidden overflow-hidden glass border-t border-white/20 dark:border-white/5"
+              className="lg:hidden pointer-events-auto overflow-hidden glass-3d rounded-2xl mt-2 border border-white/40 dark:border-white/10 shadow-2xl max-w-7xl mx-auto"
             >
               <div className="px-4 py-4 flex flex-col gap-1">
                 {NAV_LINKS.map(link => (
@@ -188,7 +189,7 @@ export default function Navbar({ darkMode, toggleDark }) {
                     onClick={() => setOpen(false)}
                     className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors
                       ${pathname === link.to
-                        ? 'bg-gold/15 text-gold'
+                        ? 'bg-gold/15 text-gold font-semibold'
                         : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-charcoal-light'
                       }`}
                   >
@@ -198,14 +199,14 @@ export default function Navbar({ darkMode, toggleDark }) {
               </div>
               
               {/* Mobile search */}
-              <form onSubmit={handleSearch} className="mt-2 px-3">
+              <form onSubmit={handleSearch} className="pb-4 px-4">
                 <div className="relative">
                   <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input
                     value={search}
                     onChange={e => setSearch(e.target.value)}
                     placeholder="Search clothes…"
-                    className="w-full h-11 pl-10 pr-4 rounded-xl bg-cream dark:bg-charcoal border border-border dark:border-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
+                    className="w-full h-11 pl-10 pr-4 rounded-xl bg-white/80 dark:bg-charcoal/80 border border-border dark:border-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-gold/50"
                   />
                 </div>
               </form>
@@ -215,7 +216,7 @@ export default function Navbar({ darkMode, toggleDark }) {
       </motion.header>
 
       {/* Spacer */}
-      <div className="h-16" />
+      <div className="h-20 sm:h-24" />
 
       {/* icon-btn global style — inject into the nearest style tag via className */}
       <style>{`.icon-btn { @apply p-2.5 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-charcoal-light hover:text-charcoal dark:hover:text-cream transition-colors; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; }`}</style>

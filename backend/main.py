@@ -57,9 +57,9 @@ app.add_middleware(
 )
 
 
-UPLOAD_DIR = Path("uploads")
+UPLOAD_DIR = Path(__file__).resolve().parent / "uploads"
 UPLOAD_DIR.mkdir(exist_ok=True)
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
 
 
 @app.on_event("startup")
@@ -84,6 +84,9 @@ SORT_MAP = {
 
 def _parse(item: Product) -> dict:
     def j(v): return json.loads(v) if isinstance(v, str) and v.startswith("[") else (v or [])
+    orig_price = getattr(item, "original_price", None)
+    if (orig_price is None or orig_price <= 0) and item.price:
+        orig_price = round(item.price * 1.35)
     return {
         "id": item.id,
         "name": item.name, "gender": item.gender,
@@ -91,6 +94,8 @@ def _parse(item: Product) -> dict:
         "style": item.style, "color": item.color, "fabric": item.fabric,
         "season": item.season, "occasion": item.occasion,
         "brand": item.brand, "price": item.price,
+        "original_price": orig_price,
+        "in_stock": getattr(item, "in_stock", True) if getattr(item, "in_stock", None) is not None else True,
         "description": item.description,
         "image_path": item.image_path, "customer_photo": item.customer_photo,
         "external_link": item.external_link,
@@ -108,13 +113,22 @@ def _parse(item: Product) -> dict:
 
 
 def _save_image(file: UploadFile) -> str:
-    ext = Path(file.filename).suffix.lower() if file.filename else '.jpg'
+    if not file or not file.filename:
+        return ""
+    ext = Path(file.filename).suffix.lower()
     if ext not in ['.jpg', '.jpeg', '.png', '.webp']:
-        raise HTTPException(status_code=400, detail='Invalid file type. Only JPG, PNG, and WEBP are allowed.')
+        raise HTTPException(status_code=400, detail='Invalid file format. Only JPG, JPEG, PNG, and WEBP are allowed.')
     name = f"{os.urandom(8).hex()}{ext}"
     dest = UPLOAD_DIR / name
+    max_size = 10 * 1024 * 1024  # 10MB
+    size = 0
     with open(dest, "wb") as f:
-        shutil.copyfileobj(file.file, f)
+        while chunk := file.file.read(65536):
+            size += len(chunk)
+            if size > max_size:
+                dest.unlink(missing_ok=True)
+                raise HTTPException(status_code=400, detail='Image file exceeds 10MB limit.')
+            f.write(chunk)
     return f"/uploads/{name}"
 
 
@@ -225,17 +239,21 @@ def filter_options(gender: Optional[str] = None, db: Session = Depends(get_db)):
 
 @app.get("/api/stats")
 def stats(db: Session = Depends(get_db)):
-    total   = db.query(func.count(Product.id)).scalar()
-    boys    = db.query(func.count(Product.id)).filter(Product.gender == "boys").scalar()
-    girls   = db.query(func.count(Product.id)).filter(Product.gender == "girls").scalar()
+    total   = db.query(func.count(Product.id)).scalar() or 0
+    in_stock = db.query(func.count(Product.id)).filter(Product.in_stock != False).scalar() or 0
+    out_of_stock = total - in_stock
+    boys    = db.query(func.count(Product.id)).filter(Product.gender == "boys").scalar() or 0
+    girls   = db.query(func.count(Product.id)).filter(Product.gender == "girls").scalar() or 0
     avg_p   = db.query(func.avg(Product.price)).scalar()
     avg_t   = db.query(func.avg(Product.trust_score)).scalar()
-    verified = db.query(func.count(Product.id)).filter(Product.is_verified == True).scalar()
-    flagged  = db.query(func.count(FlaggedSeller.id)).scalar()
+    verified = db.query(func.count(Product.id)).filter(Product.is_verified == True).scalar() or 0
+    flagged  = db.query(func.count(FlaggedSeller.id)).scalar() or 0
     by_cat  = db.query(Product.category, func.count(Product.id)).group_by(Product.category).all()
     brands  = db.query(Product.brand, func.count(Product.id)).group_by(Product.brand).order_by(func.count(Product.id).desc()).limit(10).all()
     return {
-        "total": total, "boys": boys, "girls": girls,
+        "total": total, "in_stock": in_stock, "out_of_stock": out_of_stock,
+        "categories_count": len(by_cat),
+        "boys": boys, "girls": girls,
         "avg_price": round(avg_p or 0, 2), "avg_trust": round(avg_t or 0, 1),
         "verified": verified, "flagged": flagged,
         "by_category": [{"category": r[0], "count": r[1]} for r in by_cat],
@@ -310,76 +328,204 @@ def fraud_analyze(product_id: int, db: Session = Depends(get_db)):
 
 @app.post("/api/clothes", status_code=201, dependencies=[Depends(verify_admin)])
 async def create_cloth(
-    name: str = Form(...), gender: str = Form(...),
-    category: str = Form(...), subcategory: str = Form(...),
-    style: Optional[str] = Form(None), color: Optional[str] = Form(None),
-    fabric: Optional[str] = Form(None), season: Optional[str] = Form(None),
-    occasion: Optional[str] = Form(None), brand: Optional[str] = Form(None),
-    price: float = Form(0), description: Optional[str] = Form(None),
-    image_path: Optional[str] = Form(None), customer_photo: Optional[str] = Form(None),
+    name: str = Form(...),
+    category: str = Form(...),
+    price: float = Form(0),
+    original_price: Optional[float] = Form(None),
+    in_stock: Optional[bool] = Form(True),
+    gender: Optional[str] = Form("unisex"),
+    subcategory: Optional[str] = Form(None),
+    brand: Optional[str] = Form("Fashion Brand"),
+    description: Optional[str] = Form(""),
+    image_path: Optional[str] = Form(None),
+    customer_photo: Optional[str] = Form(None),
     external_link: Optional[str] = Form(None),
-    body_type_suitability: str = Form("[]"), skin_tone_suitability: str = Form("[]"),
-    age_group: Optional[str] = Form(None), comfort_level: str = Form("Medium"),
-    trend_score: float = Form(70), popularity: float = Form(50),
-    rating: float = Form(4.0), review_count: int = Form(0), trust_score: float = Form(75),
-    styling_tips: str = Form("[]"), matching_items: str = Form("[]"),
-    dos: str = Form("[]"), donts: str = Form("[]"),
+    style: Optional[str] = Form("Casual"),
+    color: Optional[str] = Form(None),
+    fabric: Optional[str] = Form(None),
+    season: Optional[str] = Form("All-Season"),
+    occasion: Optional[str] = Form("Casual"),
+    body_type_suitability: str = Form("[]"),
+    skin_tone_suitability: str = Form("[]"),
+    age_group: Optional[str] = Form("All"),
+    comfort_level: str = Form("High"),
+    trend_score: float = Form(75.0),
+    popularity: float = Form(70.0),
+    rating: float = Form(4.5),
+    review_count: int = Form(12),
+    trust_score: float = Form(85.0),
+    styling_tips: str = Form("[]"),
+    matching_items: str = Form("[]"),
+    dos: str = Form("[]"),
+    donts: str = Form("[]"),
     image: Optional[UploadFile] = File(None),
     db: Session = Depends(get_db),
 ):
-    img = _save_image(image) if image and image.filename else image_path
+    clean_name = (name or "").strip()
+    if not clean_name:
+        raise HTTPException(status_code=400, detail="Product name is required.")
+    if price < 0:
+        raise HTTPException(status_code=400, detail="Price cannot be negative.")
+    if original_price is not None and original_price < 0:
+        raise HTTPException(status_code=400, detail="Original price cannot be negative.")
+
+    # Image handling: Upload file has precedence, then image_path URL string
+    img = None
+    if image and image.filename:
+        img = _save_image(image)
+    elif image_path and image_path.strip():
+        img = image_path.strip()
+
+    clean_category = (category or "upperwear").strip().lower()
+    clean_subcat = (subcategory or clean_category).strip()
+
+    if original_price is None or original_price == 0:
+        original_price = round(price * 1.35) if price > 0 else 0
+
     prod = Product(
-        name=name, gender=gender, category=category, subcategory=subcategory,
-        style=style, color=color, fabric=fabric, season=season, occasion=occasion,
-        brand=brand, price=price, description=description,
-        image_path=img, customer_photo=customer_photo, external_link=external_link,
+        name=clean_name, gender=(gender or "unisex").strip().lower(),
+        category=clean_category, subcategory=clean_subcat,
+        style=style or "Casual", color=color, fabric=fabric,
+        season=season or "All-Season", occasion=occasion or "Casual",
+        brand=(brand or "Fashion Brand").strip(),
+        price=float(price), original_price=float(original_price),
+        in_stock=bool(in_stock) if in_stock is not None else True,
+        description=description or "",
+        image_path=img, customer_photo=customer_photo or img,
+        external_link=external_link,
         body_type_suitability=body_type_suitability, skin_tone_suitability=skin_tone_suitability,
-        age_group=age_group, comfort_level=comfort_level,
+        age_group=age_group or "All", comfort_level=comfort_level or "High",
         trend_score=trend_score, popularity=popularity,
         rating=rating, review_count=review_count, trust_score=trust_score,
+        is_verified=True,
         styling_tips=styling_tips, matching_items=matching_items, dos=dos, donts=donts,
     )
-    db.add(prod); db.commit(); db.refresh(prod)
+    db.add(prod)
+    db.commit()
+    db.refresh(prod)
     return _parse(prod)
 
 
 @app.put("/api/clothes/{item_id}", dependencies=[Depends(verify_admin)])
 async def update_cloth(
     item_id: int,
-    name: Optional[str] = Form(None), gender: Optional[str] = Form(None),
-    category: Optional[str] = Form(None), subcategory: Optional[str] = Form(None),
-    style: Optional[str] = Form(None), color: Optional[str] = Form(None),
-    fabric: Optional[str] = Form(None), season: Optional[str] = Form(None),
-    occasion: Optional[str] = Form(None), brand: Optional[str] = Form(None),
-    price: Optional[float] = Form(None), description: Optional[str] = Form(None),
-    image_path: Optional[str] = Form(None), customer_photo: Optional[str] = Form(None),
+    name: Optional[str] = Form(None),
+    gender: Optional[str] = Form(None),
+    category: Optional[str] = Form(None),
+    subcategory: Optional[str] = Form(None),
+    style: Optional[str] = Form(None),
+    color: Optional[str] = Form(None),
+    fabric: Optional[str] = Form(None),
+    season: Optional[str] = Form(None),
+    occasion: Optional[str] = Form(None),
+    brand: Optional[str] = Form(None),
+    price: Optional[float] = Form(None),
+    original_price: Optional[float] = Form(None),
+    in_stock: Optional[bool] = Form(None),
+    description: Optional[str] = Form(None),
+    image_path: Optional[str] = Form(None),
+    customer_photo: Optional[str] = Form(None),
     external_link: Optional[str] = Form(None),
-    body_type_suitability: Optional[str] = Form(None), skin_tone_suitability: Optional[str] = Form(None),
-    age_group: Optional[str] = Form(None), comfort_level: Optional[str] = Form(None),
-    trend_score: Optional[float] = Form(None), popularity: Optional[float] = Form(None),
-    rating: Optional[float] = Form(None), review_count: Optional[int] = Form(None),
+    body_type_suitability: Optional[str] = Form(None),
+    skin_tone_suitability: Optional[str] = Form(None),
+    age_group: Optional[str] = Form(None),
+    comfort_level: Optional[str] = Form(None),
+    trend_score: Optional[float] = Form(None),
+    popularity: Optional[float] = Form(None),
+    rating: Optional[float] = Form(None),
+    review_count: Optional[int] = Form(None),
     trust_score: Optional[float] = Form(None),
-    styling_tips: Optional[str] = Form(None), matching_items: Optional[str] = Form(None),
-    dos: Optional[str] = Form(None), donts: Optional[str] = Form(None),
+    styling_tips: Optional[str] = Form(None),
+    matching_items: Optional[str] = Form(None),
+    dos: Optional[str] = Form(None),
+    donts: Optional[str] = Form(None),
     image: Optional[UploadFile] = File(None),
     db: Session = Depends(get_db),
 ):
     prod = db.query(Product).get(item_id)
-    if not prod: raise HTTPException(404)
-    fields = dict(name=name, gender=gender, category=category, subcategory=subcategory,
-                  style=style, color=color, fabric=fabric, season=season, occasion=occasion,
-                  brand=brand, price=price, description=description,
-                  image_path=(_save_image(image) if image and image.filename else image_path),
-                  customer_photo=customer_photo, external_link=external_link,
-                  body_type_suitability=body_type_suitability, skin_tone_suitability=skin_tone_suitability,
-                  age_group=age_group, comfort_level=comfort_level,
-                  trend_score=trend_score, popularity=popularity,
-                  rating=rating, review_count=review_count, trust_score=trust_score,
-                  styling_tips=styling_tips, matching_items=matching_items, dos=dos, donts=donts)
-    for k, v in fields.items():
-        if v is not None: setattr(prod, k, v)
-    db.commit(); db.refresh(prod)
+    if not prod:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    if price is not None and price < 0:
+        raise HTTPException(status_code=400, detail="Price cannot be negative.")
+    if original_price is not None and original_price < 0:
+        raise HTTPException(status_code=400, detail="Original price cannot be negative.")
+
+    # Safe Image Update:
+    # 1. New file upload replaces image
+    # 2. Or valid non-empty URL string replaces image
+    # 3. Otherwise existing image is preserved!
+    if image and image.filename:
+        prod.image_path = _save_image(image)
+    elif image_path is not None and image_path.strip() != "":
+        prod.image_path = image_path.strip()
+
+    if name is not None and name.strip() != "":
+        prod.name = name.strip()
+    if gender is not None and gender.strip() != "":
+        prod.gender = gender.strip().lower()
+    if category is not None and category.strip() != "":
+        prod.category = category.strip().lower()
+    if subcategory is not None and subcategory.strip() != "":
+        prod.subcategory = subcategory.strip()
+    if price is not None:
+        prod.price = float(price)
+    if original_price is not None:
+        prod.original_price = float(original_price)
+    if in_stock is not None:
+        prod.in_stock = bool(in_stock)
+    if description is not None:
+        prod.description = description
+    if brand is not None and brand.strip() != "":
+        prod.brand = brand.strip()
+    if external_link is not None:
+        prod.external_link = external_link.strip()
+    if customer_photo is not None and customer_photo.strip() != "":
+        prod.customer_photo = customer_photo.strip()
+    if style is not None and style.strip() != "":
+        prod.style = style.strip()
+    if color is not None and color.strip() != "":
+        prod.color = color.strip()
+    if fabric is not None and fabric.strip() != "":
+        prod.fabric = fabric.strip()
+    if season is not None and season.strip() != "":
+        prod.season = season.strip()
+    if occasion is not None and occasion.strip() != "":
+        prod.occasion = occasion.strip()
+    if body_type_suitability is not None:
+        prod.body_type_suitability = body_type_suitability
+    if skin_tone_suitability is not None:
+        prod.skin_tone_suitability = skin_tone_suitability
+    if age_group is not None:
+        prod.age_group = age_group
+    if comfort_level is not None:
+        prod.comfort_level = comfort_level
+    if trend_score is not None:
+        prod.trend_score = float(trend_score)
+    if popularity is not None:
+        prod.popularity = float(popularity)
+    if rating is not None:
+        prod.rating = float(rating)
+    if review_count is not None:
+        prod.review_count = int(review_count)
+    if trust_score is not None:
+        prod.trust_score = float(trust_score)
+
+    db.commit()
+    db.refresh(prod)
     return _parse(prod)
+
+
+@app.patch("/api/clothes/{item_id}/toggle-stock", dependencies=[Depends(verify_admin)])
+def toggle_stock(item_id: int, db: Session = Depends(get_db)):
+    prod = db.query(Product).get(item_id)
+    if not prod:
+        raise HTTPException(status_code=404, detail="Product not found")
+    cur_stock = getattr(prod, "in_stock", True)
+    prod.in_stock = not (cur_stock if cur_stock is not None else True)
+    db.commit()
+    db.refresh(prod)
+    return {"success": True, "in_stock": prod.in_stock, "product": _parse(prod)}
 
 
 @app.delete("/api/clothes/{item_id}", dependencies=[Depends(verify_admin)])

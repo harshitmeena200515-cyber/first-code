@@ -28,6 +28,8 @@ class Product(Base):
     # Commerce
     brand         = Column(String(80), index=True)
     price         = Column(Float, default=0.0)
+    original_price = Column(Float, nullable=True)
+    in_stock      = Column(Boolean, default=True)
     description   = Column(Text)
     image_path    = Column(Text)          # Studio/listing photo URL
     customer_photo = Column(Text)         # Customer review photo (for E-vs-R slider)

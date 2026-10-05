@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiExternalLink, FiPercent, FiShoppingBag, FiStar, FiShield } from 'react-icons/fi'
-import { fetchClothes } from '../api'
+import { fetchClothes, getImageUrl } from '../api'
 import RatingTag from '../components/RatingTag'
 import { Link } from 'react-router-dom'
 import AffiliateDisclosureBanner from '../components/AffiliateDisclosureBanner';
@@ -43,9 +43,14 @@ export default function Deals() {
             platformName = 'Myntra'
           }
 
-          // On-the-fly realistic discounts (ranging from 15% to 55%)
-          const discountPercent = ((item.id * 7) % 41) + 15 
-          const originalPrice = Math.round(item.price / (1 - discountPercent / 100))
+          let originalPrice = item.original_price
+          let discountPercent
+          if (originalPrice && originalPrice > item.price) {
+            discountPercent = Math.round(((originalPrice - item.price) / originalPrice) * 100)
+          } else {
+            discountPercent = ((item.id * 7) % 41) + 15 
+            originalPrice = Math.round(item.price / (1 - discountPercent / 100))
+          }
 
           return {
             ...item,
@@ -294,42 +299,45 @@ export default function Deals() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.35, delay: index * 0.05 }}
-                    className="group relative bg-white dark:bg-charcoal-light/40 rounded-2xl overflow-hidden shadow-card hover:shadow-hover transition-all duration-300 border border-border dark:border-gray-800"
+                    className="card-3d-wrap"
                   >
-                    
-                    {/* Image frame */}
-                    <Link to={`/item/${item.id}`} className="block">
-                      <div className="relative aspect-[3/4] overflow-hidden bg-cream dark:bg-charcoal">
-                        <img
-                          src={item.image_path || FALLBACK}
-                          alt={item.name}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          onError={e => { e.target.src = FALLBACK }}
-                        />
-                        
-                        {/* Discount badge */}
-                        <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-lg shadow-md flex items-center gap-0.5">
-                          <FiPercent className="w-3.5 h-3.5" />
-                          <span>{item.discountPercent}% OFF</span>
-                        </div>
+                    <div
+                      className="group relative bg-white dark:bg-charcoal-light/40 rounded-2xl overflow-hidden shadow-card hover:shadow-2xl transition-all duration-300 border border-border dark:border-gray-800"
+                      style={{ transformStyle: 'preserve-3d' }}
+                    >
+                      {/* Image frame */}
+                      <Link to={`/item/${item.id}`} className="block" style={{ transformStyle: 'preserve-3d' }}>
+                        <div className="relative aspect-[3/4] overflow-hidden bg-cream dark:bg-charcoal" style={{ transform: 'translateZ(15px)', transformStyle: 'preserve-3d' }}>
+                          <img
+                            src={getImageUrl(item.image_path) || FALLBACK}
+                            alt={item.name}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            onError={e => { e.target.src = FALLBACK }}
+                          />
+                          
+                          {/* Discount badge */}
+                          <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-lg shadow-md flex items-center gap-0.5 z-10" style={{ transform: 'translateZ(30px)' }}>
+                            <FiPercent className="w-3.5 h-3.5" />
+                            <span>{item.discountPercent}% OFF</span>
+                          </div>
 
-                        {/* Platform Source tag */}
-                        <div className="absolute top-3 right-3">
-                          <span className={`text-[10px] font-bold text-white px-2 py-1 rounded-full shadow-md ${item.logoColor}`}>
-                            {item.platformName}
-                          </span>
-                        </div>
+                          {/* Platform Source tag */}
+                          <div className="absolute top-3 right-3 z-10" style={{ transform: 'translateZ(30px)' }}>
+                            <span className={`text-[10px] font-bold text-white px-2 py-1 rounded-full shadow-md ${item.logoColor}`}>
+                              {item.platformName}
+                            </span>
+                          </div>
 
-                        {/* Trust Score badge */}
-                        <div className="absolute bottom-3 left-3">
-                          <span className={`text-[10px] font-bold px-2 py-1 rounded-full shadow-md backdrop-blur-md flex items-center gap-1 bg-black/60 text-white border border-white/10`}>
-                            <FiShield className={tLevel === 'high' ? 'text-emerald-400' : tLevel === 'medium' ? 'text-amber-400' : 'text-red-400'} />
-                            <span>Trust: {(item.trust_score ?? 0).toFixed(0)}</span>
-                          </span>
-                        </div>
+                          {/* Trust Score badge */}
+                          <div className="absolute bottom-3 left-3 z-10" style={{ transform: 'translateZ(30px)' }}>
+                            <span className={`text-[10px] font-bold px-2 py-1 rounded-full shadow-md backdrop-blur-md flex items-center gap-1 bg-black/60 text-white border border-white/10`}>
+                              <FiShield className={tLevel === 'high' ? 'text-emerald-400' : tLevel === 'medium' ? 'text-amber-400' : 'text-red-400'} />
+                              <span>Trust: {(item.trust_score ?? 0).toFixed(0)}</span>
+                            </span>
+                          </div>
 
-                      </div>
-                    </Link>
+                        </div>
+                      </Link>
 
                     {/* Card Body */}
                     <div className="p-4">
@@ -369,7 +377,7 @@ export default function Deals() {
                       </a>
 
                     </div>
-
+                    </div>
                   </motion.div>
                 )
               })}
